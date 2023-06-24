@@ -1,4 +1,5 @@
 ﻿using API.Utility;
+using Microsoft.AspNetCore.Mvc;
 
 namespace API.ViewModel.SubCategory
 {
@@ -10,4 +11,5 @@ namespace API.ViewModel.SubCategory
         public Risk RiskLevel { get; set; }
 
     }
+
 }
