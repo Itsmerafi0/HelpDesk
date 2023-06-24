@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Security.Claims;
 
-namespace FinalProject.Controllers;
+namespace API.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 

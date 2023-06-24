@@ -3,7 +3,7 @@ using API.Models;
 using API.ViewModel.Employees;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FinalProject.Controllers
+namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

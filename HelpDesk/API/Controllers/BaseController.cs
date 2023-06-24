@@ -7,148 +7,143 @@ using API.Models;
 using API.ViewModel.Account;
 using API.ViewModel.Response;
 
-namespace FinalProject.Controllers
+namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller")]
 /*    [Authorize]
-*/    public class BaseController<TModel, TViewModel> : ControllerBase
-    {
-        private readonly IGeneralRepository<TModel> _repository;
+*/
 
-        private readonly IMapper<TModel, TViewModel> _mapper;
-        private IAccountRepository accountRepository;
-        private IMapper<Account, AccountVM> mapper;
-
-        public BaseController(IGeneralRepository<TModel> repository, IMapper<TModel, TViewModel> mapper)
+    public class BaseController<TModel, TViewModel> : ControllerBase
         {
-            _repository = repository;
-            _mapper = mapper;
-        }
+            private readonly IGeneralRepository<TModel> _repository;
+            private readonly IMapper<TModel, TViewModel> _mapper;
 
-        public BaseController(IAccountRepository accountRepository, IMapper<Account, AccountVM> mapper)
-        {
-            this.accountRepository = accountRepository;
-            this.mapper = mapper;
-        }
-
-        [HttpGet]
-        public IActionResult GetAll()
-        {
-            var models = _repository.GetAll();
-            if (!models.Any())
+            public BaseController(IGeneralRepository<TModel> repository, IMapper<TModel, TViewModel> mapper)
             {
-                return NotFound(new ResponseVM<TViewModel>
+                _repository = repository;
+                _mapper = mapper;
+            }
+
+
+            [HttpGet]
+            public IActionResult GetAll()
+            {
+                var models = _repository.GetAll();
+                if (!models.Any())
                 {
-                    Code = StatusCodes.Status404NotFound,
-                    Status = HttpStatusCode.NotFound.ToString(),
-                    Message = "Data not found"
+                    return NotFound(new ResponseVM<TViewModel>
+                    {
+                        Code = StatusCodes.Status404NotFound,
+                        Status = HttpStatusCode.NotFound.ToString(),
+                        Message = "Data not found"
+                    });
+                }
+
+                var resultConverted = models.Select(_mapper.Map).ToList();
+
+                return Ok(new ResponseVM<List<TViewModel>>
+                {
+                    Code = StatusCodes.Status200OK,
+                    Status = HttpStatusCode.OK.ToString(),
+                    Message = "Success",
+                    Data = resultConverted
                 });
             }
 
-            var resultConverted = models.Select(_mapper.Map).ToList();
-
-            return Ok(new ResponseVM<List<TViewModel>>
+            [HttpGet("{guid}")]
+            public IActionResult GetByGuid(Guid guid)
             {
-                Code = StatusCodes.Status200OK,
-                Status = HttpStatusCode.OK.ToString(),
-                Message = "Success",
-                Data = resultConverted
-            });
-        }
-
-        [HttpGet("{guid}")]
-        public IActionResult GetByGuid(Guid guid)
-        {
-            var model = _repository.GetByGuid(guid);
-            if (model is null)
-            {
-                return NotFound(new ResponseVM<TViewModel>
+                var model = _repository.GetByGuid(guid);
+                if (model is null)
                 {
-                    Code = StatusCodes.Status404NotFound,
-                    Status = HttpStatusCode.NotFound.ToString(),
-                    Message = "Data not found"
+                    return NotFound(new ResponseVM<TViewModel>
+                    {
+                        Code = StatusCodes.Status404NotFound,
+                        Status = HttpStatusCode.NotFound.ToString(),
+                        Message = "Data not found"
+                    });
+                }
+
+                var resultConverted = _mapper.Map(model);
+
+                return Ok(new ResponseVM<TViewModel>
+                {
+                    Code = StatusCodes.Status200OK,
+                    Status = HttpStatusCode.OK.ToString(),
+                    Message = "Success",
+                    Data = resultConverted
                 });
             }
 
-            var resultConverted = _mapper.Map(model);
-
-            return Ok(new ResponseVM<TViewModel>
+            [HttpPost]
+            public IActionResult Create(TViewModel viewModel)
             {
-                Code = StatusCodes.Status200OK,
-                Status = HttpStatusCode.OK.ToString(),
-                Message = "Success",
-                Data = resultConverted
-            });
-        }
-
-        [HttpPost]
-        public IActionResult Create(TViewModel viewModel)
-        {
-            var model = _mapper.Map(viewModel);
-            var result = _repository.Create(model);
-            if (result is null)
-            {
-                return NotFound(new ResponseVM<TViewModel>
+                var model = _mapper.Map(viewModel);
+                var result = _repository.Create(model);
+                if (result is null)
                 {
-                    Code = StatusCodes.Status404NotFound,
-                    Status = HttpStatusCode.NotFound.ToString(),
-                    Message = "Create Failed"
+                    return NotFound(new ResponseVM<TViewModel>
+                    {
+                        Code = StatusCodes.Status404NotFound,
+                        Status = HttpStatusCode.NotFound.ToString(),
+                        Message = "Create Failed"
+                    });
+                }
+
+                return Ok(new ResponseVM<TModel>
+                {
+                    Code = StatusCodes.Status200OK,
+                    Status = HttpStatusCode.OK.ToString(),
+                    Message = "Create Success",
+                    Data = result
                 });
             }
 
-            return Ok(new ResponseVM<TModel>
+            [HttpPut]
+            public IActionResult Update(TViewModel viewModel)
             {
-                Code = StatusCodes.Status200OK,
-                Status = HttpStatusCode.OK.ToString(),
-                Message = "Create Success",
-                Data = result
-            });
-        }
-
-        [HttpPut]
-        public IActionResult Update(TViewModel viewModel)
-        {
-            var model = _mapper.Map(viewModel);
-            var isUpdated = _repository.Update(model);
-            if (!isUpdated)
-            {
-                return NotFound(new ResponseVM<TViewModel>
+                var model = _mapper.Map(viewModel);
+                var isUpdated = _repository.Update(model);
+                if (!isUpdated)
                 {
-                    Code = StatusCodes.Status404NotFound,
-                    Status = HttpStatusCode.NotFound.ToString(),
-                    Message = "Update Failed"
+                    return NotFound(new ResponseVM<TViewModel>
+                    {
+                        Code = StatusCodes.Status404NotFound,
+                        Status = HttpStatusCode.NotFound.ToString(),
+                        Message = "Update Failed"
+                    });
+                }
+
+                return Ok(new ResponseVM<TModel>
+                {
+                    Code = StatusCodes.Status200OK,
+                    Status = HttpStatusCode.OK.ToString(),
+                    Message = "Update Success"
                 });
             }
 
-            return Ok(new ResponseVM<TModel>
+            [HttpDelete("{guid}")]
+            public IActionResult Delete(Guid guid)
             {
-                Code = StatusCodes.Status200OK,
-                Status = HttpStatusCode.OK.ToString(),
-                Message = "Update Success"
-            });
-        }
-
-        [HttpDelete("{guid}")]
-        public IActionResult Delete(Guid guid)
-        {
-            var isDeleted = _repository.Delete(guid);
-            if (!isDeleted)
-            {
-                return NotFound(new ResponseVM<TViewModel>
+                var isDeleted = _repository.Delete(guid);
+                if (!isDeleted)
                 {
-                    Code = StatusCodes.Status404NotFound,
-                    Status = HttpStatusCode.NotFound.ToString(),
-                    Message = "Delete Failed"
+                    return NotFound(new ResponseVM<TViewModel>
+                    {
+                        Code = StatusCodes.Status404NotFound,
+                        Status = HttpStatusCode.NotFound.ToString(),
+                        Message = "Delete Failed"
+                    });
+                }
+
+                return Ok(new ResponseVM<TModel>
+                {
+                    Code = StatusCodes.Status200OK,
+                    Status = HttpStatusCode.OK.ToString(),
+                    Message = "Delete Success"
                 });
             }
-
-            return Ok(new ResponseVM<TModel>
-            {
-                Code = StatusCodes.Status200OK,
-                Status = HttpStatusCode.OK.ToString(),
-                Message = "Delete Success"
-            });
         }
-    }
+    
 }
