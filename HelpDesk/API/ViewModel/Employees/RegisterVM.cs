@@ -1,7 +1,7 @@
 ﻿using API.Utility;
 using System.ComponentModel.DataAnnotations;
 
-namespace API.ViewModel.Account
+namespace API.ViewModel.Employees
 {
     public class RegisterVM
     {

@@ -28,51 +28,7 @@ public class AccountController : BaseController<Account, AccountVM>
         _employeeRepository = employeeRepository;
         _tokenService = tokenRepository;
     }
-    [HttpPost("Register")]
-
-    public IActionResult Register(RegisterVM registerVM)
-    {
-        var result = _accountRepository.Register(registerVM);
-        switch(result)
-        {
-            case 0:
-                return BadRequest(new ResponseVM<AccountVM>
-                {
-                    Code = StatusCodes.Status400BadRequest,
-                    Status = HttpStatusCode.BadRequest.ToString(),
-                    Message = "Register Failed"
-                });
-
-            case 1:
-                return BadRequest(new ResponseVM<AccountVM>
-                {
-                    Code = StatusCodes.Status400BadRequest,
-                    Status = HttpStatusCode.BadRequest.ToString(),
-                    Message = "Email Already Exists"
-                });
-
-            case 2:
-                return BadRequest(new ResponseVM<AccountVM>
-                {
-                    Code = StatusCodes.Status400BadRequest,
-                    Status = HttpStatusCode.BadRequest.ToString(),
-                    Message = "Phone Already Exists"
-                });
-            case 3:
-                return Ok(new ResponseVM<AccountVM>
-                {
-                    Code = StatusCodes.Status200OK,
-                    Status = HttpStatusCode.OK.ToString(),
-                    Message = "Registration Success"
-                });
-        }
-        return Ok(new ResponseVM<AccountVM>
-        {
-            Code = StatusCodes.Status400BadRequest,
-            Status = HttpStatusCode.BadRequest.ToString(),
-            Message = "Registration Success"
-        });
-    }
+   
 
     [HttpPost("Login")]
     [AllowAnonymous]

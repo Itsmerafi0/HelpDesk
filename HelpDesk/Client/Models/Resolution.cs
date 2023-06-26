@@ -8,5 +8,8 @@ namespace Client.Models
         public string Notes { get; set; }
         public DateTime FInishDate { get; set; }
         public Guid ComplainGuid { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+        public DateTime ModifiedDate { get; set; }
     }
 }

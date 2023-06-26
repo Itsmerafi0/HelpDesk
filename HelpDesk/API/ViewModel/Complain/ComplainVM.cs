@@ -6,13 +6,12 @@ namespace API.ViewModel.Complain
 {
     public class ComplainVM
     {
-        public string Category { get; set; }
-        public string SubCategory { get; set; }
-        public StatusLevel StatusLevel { get; set; }
-        public Risk RiskLevel { get; set; }
+        public Guid? Guid { get; set; }
+        public Guid SubCategoryGuid { get; set; }
         public string Description { get; set; }
-        public string? Attachment { get; set; }
-        public DateTime FinishDate { get; set; }
+        public byte[] Attachment { get; set; }
         public Guid EmployeeGuid { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime ModifiedDate { get; set; }
     }
 }

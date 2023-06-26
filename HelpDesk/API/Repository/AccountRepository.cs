@@ -15,74 +15,10 @@ namespace API.Repository
 {
     public class AccountRepository : GeneralRepository<Account>, IAccountRepository
     {
-        public AccountRepository(HelpDeskManagementDBContext dbContext,
-            IEmployeeRepository employeeRepository) : base(dbContext)
+        public AccountRepository(HelpDeskManagementDBContext dbContext) : base(dbContext)
         {
-            _employeerepository = employeeRepository;
-        }
-
-        private readonly IEmployeeRepository _employeerepository;
-
-        public int Register(RegisterVM registerVM)
-        {
-            try
-            {
-                var employee = new Employee
-                {
-                    Nik = GenerateNIK(),
-                    FirstName = registerVM.FirstName,
-                    LastName = registerVM.LastName,
-                    BirthDate = registerVM.BirthDate,
-                    Gender = registerVM.Gender,
-                    HiringDate = registerVM.HiringDate,
-                    Email = registerVM.Email,
-                    PhoneNumber = registerVM.PhoneNumber
-                };
-                var result = _employeerepository.Create(employee);
-
-                var account = new Account
-                {
-                    Guid = employee.Guid,
-                    Password = Hashing.HashPassword(registerVM.Password),
-                    IsDeleted = false,
-                    IsUsed = false,
-                    OTP = 0
-                };
-
-                Create(account);
-
-                var accountrole = new AccountRole
-                {
-                    RoleGuid = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
-                    AccountGuid = employee.Guid
-                };
-                _dbContext.AccountRoles.Add(accountrole);
-                _dbContext.SaveChanges();
-
-                return 3;
-            }
-            catch
-            {
-                return 0;
-            }
 
         }
-        private string GenerateNIK()
-        {
-            var lastNik = _employeerepository.GetAll().OrderByDescending(e => int.Parse(e.Nik)).FirstOrDefault();
-
-            if (lastNik != null)
-            {
-                int lastNikNumber;
-                if (int.TryParse(lastNik.Nik, out lastNikNumber))
-                {
-                    return (lastNikNumber + 1).ToString();
-                }
-            }
-
-            return "100000";
-        }
-
         public LoginVM Login(LoginVM loginVM)
         {
 

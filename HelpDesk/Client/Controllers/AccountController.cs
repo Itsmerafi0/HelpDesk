@@ -21,17 +21,15 @@ namespace Client.Controllers
         }
 
         [HttpGet]
-        public IActionResult Login()
+        public IActionResult Logins()
         {
             return View();
         }
 
         [HttpPost]
-        [AllowAnonymous]
-        /*[ValidateAntiForgeryToken]*/
-        public async Task<IActionResult> Login(LoginVM loginVM)
+        public async Task<IActionResult> Logins(LoginVM loginVM)
         {
-            var result = await repository.Login(loginVM);
+            var result = await repository.Logins(loginVM);
             if (result.Code == 0)
             {
                 return RedirectToAction("Notfound", "Home");
@@ -44,9 +42,34 @@ namespace Client.Controllers
             else if (result.Code == 200)
             {
                 HttpContext.Session.SetString("JWToken", result.Data);
-                return RedirectToAction("Index", "Home");
+                if (User.IsInRole("Admin"))
+                {
+                    // Check if the user is already logged in as an admin
+                    if (HttpContext.Session.GetString("IsAdminLoggedIn") != null)
+                    {
+                        // Redirect to the admin page directly
+                        return RedirectToAction("Index", "Employee");
+                    }
+                    else
+                    {
+                        // Set a session variable indicating that the user is now logged in as an admin
+                        HttpContext.Session.SetString("IsAdminLoggedIn", "true");
+                    }
+                }
+
+                // Redirect to the appropriate page based on the user's role
+                if (User.IsInRole("Admin"))
+                {
+                    return RedirectToAction("Admin", "Home"); // Redirect to the admin page
+                }
+                else if (User.IsInRole("User"))
+                {
+
+                    return RedirectToAction("Index", "Home"); // Redirect to the user page
+                }
             }
-            return RedirectToAction("Index", "Account");
+
+            return View();
         }
 
         [HttpGet("/Logout")]

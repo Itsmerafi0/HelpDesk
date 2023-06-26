@@ -1,4 +1,5 @@
 ﻿using API.Models;
+using API.ViewModel.Employees;
 
 namespace API.Contracs
 {
@@ -9,5 +10,10 @@ namespace API.Contracs
         Employee GetEmail(string email);
 
         Guid? FindGuidByEmail(string email);
+
+        int Register(RegisterVM registerVM);
+
+        GetComplainForUserVM GetAllComplainUser(Guid guid);
+
     }
 }

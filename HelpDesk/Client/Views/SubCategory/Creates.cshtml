@@ -1,26 +1,36 @@
-﻿@model Client.Models.Category
+﻿@model Client.Models.SubCategory
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Creates";
 }
 
-<h1>Create</h1>
+<h1>Creates</h1>
 
-<h4>Category</h4>
+<h4>SubCategory</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Creates">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
+            <div class="form-group"hidden>
                 <label asp-for="Guid" class="control-label"></label>
-                <input asp-for="Guid" class="form-control" />
+                <input asp-for="Guid" value="0"class="form-control" />
                 <span asp-validation-for="Guid" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CategoryGuid" class="control-label"></label>
+                <input asp-for="CategoryGuid" value="0" class="form-control" />
+                <span asp-validation-for="CategoryGuid" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RiskLevel" class="control-label"></label>
+                <input asp-for="RiskLevel" class="form-control" />
+                <span asp-validation-for="RiskLevel" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

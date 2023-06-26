@@ -1,5 +1,6 @@
 ﻿using Client.Models;
 using Client.Repositories.Interface;
+using Client.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Client.Controllers
@@ -36,42 +37,11 @@ namespace Client.Controllers
             return View(employees);
         }
 
-        /*public async Task<IActionResult> GetAllEmployee()
-		{
-			var result = await repository.GetAllEmployee();
-			var getAllEmp = new List<EmployeeVM>();
-
-			if (result.Data != null)
-			{
-				getAllEmp = result.Data.Select(e => new EmployeeVM
-				{
-					Guid = e.Guid,
-					Nik = e.Nik,
-					FirstName = e.FirstName,
-					LastName = e.LastName,
-					BirthDate = e.BirthDate,
-					Gender = e.Gender,
-					HiringDate = e.HiringDate,
-					Email = e.Email,
-					PhoneNumber = e.PhoneNumber,
-				}).ToList();
-			}
-			return View(getAllEmp);
-		}*/
-
-        [HttpGet]
-        public async Task<IActionResult> Create()
-        {
-            return View();
-        }
-
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Employee employee)
+        public async Task<IActionResult> Edit(Employee employee)
         {
-            if (ModelState.IsValid)
-            {
-                var result = await repository.Posts(employee);
+           
+                var result = await repository.Puts(employee);
                 if (result.Code == 200)
                 {
                     return RedirectToAction(nameof(Index));
@@ -81,33 +51,13 @@ namespace Client.Controllers
                     ModelState.AddModelError(string.Empty, result.Message);
                     return View();
                 }
-            }
+            
             return View();
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Employee employee, Guid guid)
+        public async Task<IActionResult> Edit(Guid Guid)
         {
-
-            var result = await repository.Puts(employee);
-            if (result.Code == 200)
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            else if (result.Code == 409)
-            {
-                ModelState.AddModelError(string.Empty, result.Message);
-                return View();
-            }
-
-            return View();
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Edit(Guid guid)
-        {
-            var result = await repository.Gets(guid);
+            var result = await repository.Gets(Guid);
             var employee = new Employee();
             if (result.Data?.Guid is null)
             {
@@ -124,13 +74,13 @@ namespace Client.Controllers
                 employee.HiringDate = result.Data.HiringDate;
                 employee.Email = result.Data.Email;
                 employee.PhoneNumber = result.Data.PhoneNumber;
-
+                employee.CreatedDate = result.Data.CreatedDate;
+                employee.ModifiedDate = DateTime.Now;
             }
 
             return View(employee);
         }
-
-        public async Task<IActionResult> Delete(Guid guid)
+        public async Task<IActionResult> Deletes(Guid guid)
         {
             var result = await repository.Gets(guid);
             var employees = new Employee();
@@ -164,6 +114,27 @@ namespace Client.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return RedirectToAction(nameof(Index));
+        }
+        public async Task<IActionResult> Registers(RegisterVM registerVM)
+        {
+
+            var result = await repository.Registers(registerVM);
+            if (result is null)
+            {
+                return RedirectToAction("Error", "Home");
+            }
+            else if (result.Code == 409)
+            {
+                ModelState.AddModelError(string.Empty, result.Message);
+                TempData["Error"] = $"Something Went Wrong! - {result.Message}!";
+                return View();
+            }
+            else if (result.Code == 200)
+            {
+                TempData["Success"] = $"Data has been Successfully Registered! - {result.Message}!";
+                return RedirectToAction("Index", "Employee");
+            }
+            return View();
         }
     }
 }

@@ -16,11 +16,11 @@ namespace Client.Repositories.Data
             this.request = request;
             httpClient = new HttpClient
             {
-                BaseAddress = new Uri("https://localhost:7281/api/")
+                BaseAddress = new Uri("https://localhost:7024/api/")
             };
         }
 
-        public async Task<ResponseViewModel<string>> Login(LoginVM entity)
+        public async Task<ResponseViewModel<string>> Logins(LoginVM entity)
         {
             ResponseViewModel<string> entityVM = null;
             StringContent content = new StringContent(JsonConvert.SerializeObject(entity), Encoding.UTF8, "application/json");

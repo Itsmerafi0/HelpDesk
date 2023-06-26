@@ -1,0 +1,80 @@
+﻿@model Client.Models.Complain
+
+@{
+    ViewData["Title"] = "Creates";
+}
+
+<h1>Creates</h1>
+
+<h4>Complain</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Creates">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group" hidden>
+                <label asp-for="Guid" class="control-label"></label>
+                <input asp-for="Guid" class="form-control" />
+                <span asp-validation-for="Guid" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SubCategoryGuid" class="control-label"></label>
+                <input asp-for="SubCategoryGuid" class="form-control" />
+                <span asp-validation-for="SubCategoryGuid" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Attachment" class="control-label"></label>
+                <input type="hidden" asp-for="Attachment" class="form-control" />
+                <input type="file" class="form-control" onchange="encodeFile(this)" />
+                <span asp-validation-for="Attachment" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmployeeGuid" class="control-label"></label>
+                <input asp-for="EmployeeGuid" class="form-control" />
+                <span asp-validation-for="EmployeeGuid" class="text-danger"></span>
+            </div>
+            <div class="form-group"hidden>
+                <label asp-for="CreatedDate" class="control-label"></label>
+                <input asp-for="CreatedDate" class="form-control" />
+                <span asp-validation-for="CreatedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group"hidden>
+                <label asp-for="ModifiedDate" class="control-label"></label>
+                <input asp-for="ModifiedDate" class="form-control" />
+                <span asp-validation-for="ModifiedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    <script>
+        function encodeFile(input) {
+            const file = input.files[0];
+            const reader = new FileReader();
+
+            reader.onloadend = function () {
+                const bytes = new Uint8Array(reader.result);
+                const encodedString = btoa(String.fromCharCode.apply(null, bytes));
+                input.previousElementSibling.value = encodedString;
+            }
+
+            if (file) {
+                reader.readAsArrayBuffer(file);
+            }
+        }
+    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

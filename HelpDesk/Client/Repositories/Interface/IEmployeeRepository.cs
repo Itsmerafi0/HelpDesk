@@ -1,9 +1,12 @@
 ﻿using Client.Models;
+using Client.ViewModels;
 
 namespace Client.Repositories.Interface
 {
     public interface IEmployeeRepository : IRepository<Employee, Guid>
     {
+        public Task<ResponseMessageVM> Registers(RegisterVM entity);
 
+       /* GetComplainForUserVM GetAllComplainUser(Guid guid);*/
     }
 }

@@ -1,7 +1,10 @@
 ﻿using API.Contracs;
 using API.Models;
+using API.Repository;
 using API.ViewModel.Complain;
+using API.ViewModel.Response;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace API.Controllers;
 [ApiController]
@@ -19,4 +22,87 @@ public class ComplainController : BaseController<Complain, ComplainVM>
         _complainRepository = Complainrepository;
 
     }
+
+    [HttpGet("ComplainDetail")]
+    public IActionResult GetAllComplainDetail()
+    {
+        try
+        {
+
+            var results = _complainRepository.GetAllComplainDetail();
+
+            return Ok(new ResponseVM<List<ComplainDetailVM>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Get all complain detail succeed",
+                Data = results.ToList()
+            });
+        }
+        catch
+        {
+            return NotFound(new ResponseVM<ComplainDetailVM>
+            {
+                Code = StatusCodes.Status404NotFound,
+                Status = HttpStatusCode.NotFound.ToString(),
+                Message = "Data not found"
+            });
+        }
+
+    }
+
+    [HttpGet("ComplainDetailDeveloper")]
+    public IActionResult GetAllComplainDev()
+    {
+        try
+        {
+
+            var results = _complainRepository.GetAllComplainDev();
+
+            return Ok(new ResponseVM<List<GetComplainForDevVM>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Get all complain detail succeed",
+                Data = results.ToList()
+            });
+        }
+        catch
+        {
+            return NotFound(new ResponseVM<GetComplainForDevVM>
+            {
+                Code = StatusCodes.Status404NotFound,
+                Status = HttpStatusCode.NotFound.ToString(),
+                Message = "Data not found"
+            });
+        }
+    }
+
+    [HttpGet("ComplainDetailFinance")]
+    public IActionResult GetAllComplainFinance()
+    {
+        try
+        {
+
+            var results = _complainRepository.GetAllComplainFinance();
+
+            return Ok(new ResponseVM<List<GetComplainForFinanceVM>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Get all complain detail succeed",
+                Data = results.ToList()
+            });
+        }
+        catch
+        {
+            return NotFound(new ResponseVM<GetComplainForFinanceVM>
+            {
+                Code = StatusCodes.Status404NotFound,
+                Status = HttpStatusCode.NotFound.ToString(),
+                Message = "Data not found"
+            });
+        }
+    }
 }
+

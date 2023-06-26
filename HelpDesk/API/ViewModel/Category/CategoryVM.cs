@@ -3,6 +3,7 @@
     public class CategoryVM
     {
         public Guid? Guid { get; set; }
-        public string Name { get; set; }
+        public string CategoryName { get; set; }
+
     }
 }

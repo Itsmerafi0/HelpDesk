@@ -5,7 +5,7 @@ namespace API.Contracs
 {
     public interface IAccountRepository : IGeneralRepository<Account>
     {
-        int Register(RegisterVM registerVM);
+      
 
         LoginVM Login(LoginVM loginVM);
 

@@ -1,5 +1,9 @@
 ﻿using Client.Models;
 using Client.Repositories.Interface;
+using Client.ViewModels;
+using Newtonsoft.Json;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Client.Repositories.Data
 {
@@ -13,8 +17,31 @@ namespace Client.Repositories.Data
             this.request = request;
             httpClient = new HttpClient
             {
-                BaseAddress = new Uri("https://localhost:7281/api/")
+                BaseAddress = new Uri("https://localhost:7024/api/")
             };
         }
-    }
+        public async Task<ResponseMessageVM> Registers(RegisterVM entity)
+        {
+            ResponseMessageVM entityVM = null;
+            StringContent content = new StringContent(JsonConvert.SerializeObject(entity), Encoding.UTF8, "application/json");
+            using (var response = httpClient.PostAsync(request + "Register", content).Result)
+            {
+                string apiResponse = await response.Content.ReadAsStringAsync();
+                entityVM = JsonConvert.DeserializeObject<ResponseMessageVM>(apiResponse);
+            }
+            return entityVM;
+        }
+
+/*        public async Task<ResponseViewModel<GetComplainForUserVM>> GetAllComplainUser(Guid guid)
+        {
+            ResponseViewModel<GetComplainForUserVM> entity = null;
+
+            using (var response = await httpClient.GetAsync(request + guid))
+            {
+                string apiResponse = await response.Content.ReadAsStringAsync();
+                entity = JsonConvert.DeserializeObject<ResponseViewModel<GetComplainForUserVM>>(apiResponse);
+            }
+            return entity;
+        }
+*/    }
 }

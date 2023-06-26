@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Index";
 }
+<link rel="stylesheet" href="~/css/table.css" asp-append-version="true" />
 
 <h1>Index</h1>
 
@@ -12,28 +13,24 @@
 <table class="table">
     <thead>
         <tr>
+            <th>No</th>
             <th>
-                @Html.DisplayNameFor(model => model.Guid)
+                @Html.DisplayNameFor(model => model.CategoryName)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th></th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
+        @foreach (var (index, item) in Model.Select((value, i) => (i, value)))
+        {
+            <tr>
+                <td>@(index + 1)</td>
             <td>
-                @Html.DisplayFor(modelItem => item.Guid)
+                    @Html.DisplayFor(modelItem => item.CategoryName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                @Html.ActionLink("Edit", "Edit", new { item.Guid/* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Deletes", new { item.Guid /* id=item.PrimaryKey */ })
             </td>
         </tr>
 }
