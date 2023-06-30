@@ -227,7 +227,7 @@ namespace Client.Controllers
             else if (result.Code == 200)
             {
                 TempData["Success"] = $"Data has been Successfully Ticket! - {result.Message}!";
-                return RedirectToAction("GetAllTicketDetail", "Ticket");
+                return RedirectToAction("GetAllTicketDetails", "Ticket");
             }
             return View();
         }

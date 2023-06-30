@@ -162,37 +162,63 @@ namespace API.Repository
             return details;
         }
 
-        private string GenerateID()
+        private string GenerateID(Guid subCategoryGuid)
         {
-            var lastId = GetAll().OrderByDescending(e => int.Parse(e.TicketId)).FirstOrDefault();
-            if (lastId != null)
+            var categories = _dbContext.Categories.ToList();
+            var subcategories = _dbContext.SubCategories.ToList();
+            var tickets = GetAll();
+
+            var subCategory = subcategories.FirstOrDefault(s => s.Guid == subCategoryGuid);
+
+            if (subCategory != null)
             {
-                int lastTicketNumber;
-                if (int.TryParse(lastId.TicketId, out lastTicketNumber))
+                var category = categories.FirstOrDefault(c => c.Guid == subCategory.CategoryGuid);
+
+                if (category != null)
                 {
-                    return (lastTicketNumber + 1).ToString();
+                    string prefix = category.CategoryName.Substring(0, 1);
+
+                    var lastId = (from t in tickets
+                                  join s in subcategories on t.SubCategoryGuid equals s.Guid
+                                  join c in categories on s.CategoryGuid equals c.Guid
+                                  where t.SubCategoryGuid == subCategoryGuid
+                                  orderby t.TicketId descending
+                                  select t.TicketId).FirstOrDefault();
+
+                    if (!string.IsNullOrEmpty(lastId))
+                    {
+                        string numericPart = lastId.Substring(1);
+                        if (int.TryParse(numericPart, out int lastTicketNumber))
+                        {
+                            return prefix + (lastTicketNumber + 1).ToString();
+                        }
+                    }
+
+                    return prefix + "10000";
                 }
             }
-            return "10000";
+
+            return string.Empty; // Jika tidak ditemukan subCategoryGuid yang valid, kembalikan string kosong.
         }
 
-        public int CreateReso(TicketResoVM ticketresolutionVM)
+        public int CreateTicketResolution(TicketResoVM ticketresolutionVM)
         {
             try
             {
-                var complain = new Ticket
+                var ticket = new Ticket
                 {
-                    TicketId = GenerateID(),
+
                     SubCategoryGuid = ticketresolutionVM.SubCategoryGuid,
+                    TicketId = GenerateID(ticketresolutionVM.SubCategoryGuid),
                     Description = ticketresolutionVM.Description,
                     Attachment = ticketresolutionVM.Attachment,
                     EmployeeGuid = ticketresolutionVM.EmployeeGuid,
                 };
-                Create(complain);
+                Create(ticket);
 
                 var resolution = new Resolution
                 {
-                    Guid = complain.Guid,
+                    Guid = ticket.Guid,
                     Status = 0,
                     Notes = null,
                     FinishedDate = null
@@ -201,7 +227,7 @@ namespace API.Repository
                 _dbContext.SaveChanges();
                 return 1;
             }
-            catch 
+            catch (Exception e)
             {
 
                 return 0;

@@ -8,7 +8,7 @@ namespace API.Contracs
         IEnumerable<TicketDetailVM> GetAllComplainDetail();
         IEnumerable<GetTicketForDevVM> GetAllComplainDev();
         IEnumerable<GetTicketForFinanceVM> GetAllComplainFinance();
-        int CreateReso(TicketResoVM complainresoVM);
+        int CreateTicketResolution(TicketResoVM complainresoVM);
 
         string FindEmailByComplainGuid(Guid complainGuid);
     }

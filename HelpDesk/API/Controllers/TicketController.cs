@@ -108,7 +108,7 @@ public class TicketController : BaseController<Ticket, TicketVM>
     [HttpPost("CreateTicket")]
     public IActionResult CreateReso(TicketResoVM complainresoVM)
     {
-        var results = _complainRepository.CreateReso(complainresoVM);
+        var results = _complainRepository.CreateTicketResolution(complainresoVM);
         switch (results)
         {
             case 0:
