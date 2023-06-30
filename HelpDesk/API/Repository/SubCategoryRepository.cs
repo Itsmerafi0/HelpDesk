@@ -21,13 +21,13 @@ namespace API.Repository
 
             foreach (var subcategory in subCategories)
             {
-                var category = _dbContext.Categories.FirstOrDefault(e => e.Guid == subcategory.Guid);
+                var category = _dbContext.Categories.FirstOrDefault(c => c.Guid == subcategory.CategoryGuid);
                 if (category != null)
                 {
                     var subCategoryDetail = new SubCategoryDetailVM
                     {
                         Guid = subcategory.Guid,
-                        SubCategoryName = subcategory.Name,
+                        Name = subcategory.Name,
                         CategoryName = category.CategoryName,
                         RiskLevel = subcategory.RiskLevel
                     };

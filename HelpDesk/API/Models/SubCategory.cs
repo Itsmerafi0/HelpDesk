@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.Models
 {
+    [Table("tb_m_subcategories")]
     public class SubCategory : BaseEntity
     {
         [Column("name")]
@@ -15,7 +16,7 @@ namespace API.Models
         public Risk RiskLevel { get; set; }
 
         // Cardinality
-        public ICollection<Complain>? Complains { get; set; }
+        public ICollection<Ticket>? Complains { get; set; }
 
         public Category? Category { get; set; }
     }

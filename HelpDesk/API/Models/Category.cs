@@ -2,6 +2,7 @@
 
 namespace API.Models
 {
+    [Table("tb_m_categories")]
     public class Category : BaseEntity
     {
         [Column("name")]

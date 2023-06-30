@@ -6,5 +6,7 @@ namespace API.Contracs
     public interface ISubCategoryRepository : IGeneralRepository<SubCategory>
     {
         IEnumerable<SubCategoryDetailVM> GetSubCategoryDetail();
+
+
     }
 }

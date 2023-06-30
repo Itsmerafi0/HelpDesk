@@ -5,6 +5,7 @@ namespace Client.Repositories.Interface
 {
     public interface ISubCategoryRepository : IRepository<SubCategory, Guid>
     {
-        
+        public Task<ResponseListVM<SubCategoryDetailVM>> GetAllSub();
+
     }
 }

@@ -26,7 +26,7 @@ namespace API.Models
 
         // Cardinality
         public Account? Account { get; set; }
-        public ICollection<Complain>? Complains { get; set; }
+        public ICollection<Ticket>? Complains { get; set; }
         public ICollection<Resolution>? Resolutions { get; set; }
     }
 }

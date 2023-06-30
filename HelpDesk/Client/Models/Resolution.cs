@@ -6,9 +6,7 @@ namespace Client.Models
     {
         public StatusLevel Status { get; set; }
         public string Notes { get; set; }
-        public DateTime FInishDate { get; set; }
-        public Guid ComplainGuid { get; set; }
-
+        public DateTime FinishDate { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
     }

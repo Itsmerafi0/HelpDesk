@@ -19,13 +19,20 @@ builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IAccountRoleRepository, AccountRoleRepository>();
-builder.Services.AddScoped<IComplainRepository, ComplainRepository>();
+builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IResolutionRepository, ResolutionRepository>();
 builder.Services.AddScoped<ISubCategoryRepository, SubCategoryRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 
 builder.Services.AddSingleton(typeof(IMapper<,>), typeof(Mapper<,>));
+
+builder.Services.AddTransient<IEmailService, EmailService>(_ => new EmailService(
+    smtpServer: builder.Configuration["Email:SmtpServer"],
+    smtpPort: int.Parse(builder.Configuration["Email:SmtpPort"]),
+    fromEmailAddress: builder.Configuration["Email:FromEmailAddress"]
+    ));
+
 
 builder.Services.AddControllers();
 
@@ -77,6 +84,7 @@ builder.Services.AddSwaggerGen(x => {
         }
     });
 });
+builder.Services.AddCors();
 
 var app = builder.Build();
 
@@ -89,7 +97,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors();
+app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
 app.UseAuthentication();
 

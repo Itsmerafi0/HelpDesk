@@ -3,6 +3,8 @@ using Client.Repositories.Interface;
 using Client.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace Client.Controllers
 {
@@ -26,57 +28,74 @@ namespace Client.Controllers
             return View();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Logins(LoginVM loginVM)
+        public async Task<IActionResult> Logins(LoginVM login)
         {
-            var result = await repository.Logins(loginVM);
-            if (result.Code == 0)
+            var result = await repository.Logins(login);
+            var token = result.Data;
+            var claims = ExtractClaims(token);
+            var getRole = "";
+            /*Console.WriteLine(claims);
+*/
+            foreach (var claim in claims)
             {
-                return RedirectToAction("Notfound", "Home");
+                if (claim.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role")
+                {
+                    getRole = claim.Value;
+                    /* Console.WriteLine($"Claim Type: {claim.Type} - Claim Value: {claim.Value}");
+                     HttpContext.Session.SetString("Role", claim.Value);*/
+                }
+
+            }
+            /*            Console.WriteLine(getRole);
+            */
+            if (result is null)
+            {
+                return RedirectToAction("Error", "Home");
             }
             else if (result.Code == 409)
             {
                 ModelState.AddModelError(string.Empty, result.Message);
                 return View();
             }
-            else if (result.Code == 200)
+            if (result.Code == 200)
             {
                 HttpContext.Session.SetString("JWToken", result.Data);
-                if (User.IsInRole("Admin"))
+                /*return RedirectToAction("LandingPage", "Home");*/
+                /*var role = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Role);*/
+                if (getRole == "Admin")
                 {
-                    // Check if the user is already logged in as an admin
-                    if (HttpContext.Session.GetString("IsAdminLoggedIn") != null)
-                    {
-                        // Redirect to the admin page directly
-                        return RedirectToAction("Index", "Employee");
-                    }
-                    else
-                    {
-                        // Set a session variable indicating that the user is now logged in as an admin
-                        HttpContext.Session.SetString("IsAdminLoggedIn", "true");
-                    }
+                    return RedirectToAction("Admin", "Home");
                 }
-
-                // Redirect to the appropriate page based on the user's role
-                if (User.IsInRole("Admin"))
+                else if (getRole == "Finance")
                 {
-                    return RedirectToAction("Admin", "Home"); // Redirect to the admin page
+                    return RedirectToAction("Finance", "Home");
                 }
-                else if (User.IsInRole("User"))
+                else if (getRole == "Developer")
                 {
-
-                    return RedirectToAction("Index", "Home"); // Redirect to the user page
+                    return RedirectToAction("Developer", "Home");
+                }
+                else if (getRole == "User")
+                {
+                    return RedirectToAction("Index", "Home");
                 }
             }
-
             return View();
+
+        }
+
+        public IEnumerable<Claim> ExtractClaims(string jwtToken)
+        {
+            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+            JwtSecurityToken securityToken = (JwtSecurityToken)tokenHandler.ReadToken(jwtToken);
+            IEnumerable<Claim> claims = securityToken.Claims;
+            return claims;
         }
 
         [HttpGet("/Logout")]
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();
-            return Redirect("/Account/Login");
+            return Redirect("/Account/Logins");
         }
 
         [HttpGet]
@@ -85,27 +104,5 @@ namespace Client.Controllers
             return View();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Register(RegisterVM registerVM)
-        {
-
-            var result = await repository.Register(registerVM);
-            if (result is null)
-            {
-                return RedirectToAction("Error", "Home");
-            }
-            else if (result.Code == 409)
-            {
-                ModelState.AddModelError(string.Empty, result.Message);
-                TempData["Error"] = $"Something Went Wrong! - {result.Message}!";
-                return View();
-            }
-            else if (result.Code == 200)
-            {
-                TempData["Success"] = $"Data has been Successfully Registered! - {result.Message}!";
-                return RedirectToAction("GetAllEmployee", "Employee");
-            }
-            return View();
-        }
     }
 }

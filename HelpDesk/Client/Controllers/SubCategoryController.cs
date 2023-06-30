@@ -1,5 +1,6 @@
 ﻿using Client.Models;
 using Client.Repositories.Interface;
+using Client.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Client.Controllers
@@ -27,6 +28,24 @@ namespace Client.Controllers
                     CategoryGuid = e.CategoryGuid,
                     CreatedDate = e.CreatedDate,
                     ModifiedDate = e.ModifiedDate,
+                }).ToList();
+            }
+
+            return View(subcategories);
+        }
+        public async Task<IActionResult> GetAllSub()
+        {
+            var result = await repository.GetAllSub();
+            var subcategories = new List<SubCategoryDetailVM>();
+
+            if (result.Data != null)
+            {
+                subcategories = result.Data.Select(e => new SubCategoryDetailVM
+                {
+                    Guid = e.Guid,
+                    Name = e.Name,
+                    CategoryName = e.CategoryName,
+                    RiskLevel = e.RiskLevel
                 }).ToList();
             }
 

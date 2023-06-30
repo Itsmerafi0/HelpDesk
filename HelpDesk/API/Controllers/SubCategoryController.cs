@@ -1,7 +1,7 @@
 ﻿using API.Contracs;
 using API.Models;
 using API.Repository;
-using API.ViewModel.Complain;
+using API.ViewModel.Ticket;
 using API.ViewModel.Response;
 using API.ViewModel.SubCategory;
 using Microsoft.AspNetCore.Mvc;

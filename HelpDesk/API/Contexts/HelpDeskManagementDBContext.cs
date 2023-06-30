@@ -14,7 +14,7 @@ namespace API.Contexts
 
         public DbSet<Account> Accounts { get; set; }
         public DbSet<AccountRole> AccountRoles { get; set; }
-        public DbSet<Complain> Complains { get; set; }
+        public DbSet<Ticket> Complains { get; set; }
 
         public DbSet<Category> Categories { get; set; }
 
@@ -27,6 +27,69 @@ namespace API.Contexts
         {
             base.OnModelCreating(Builder);
 
+            Builder.Entity<Category>().HasData(
+                new Category
+                {
+                    Guid = Guid.Parse("3fa82f64-2322-4562-b3fc-2e963f44afb6"),
+                    CategoryName = nameof(CategoryLevel.Access),
+                    CreatedDate = DateTime.Now,
+                    ModifiedDate = DateTime.Now
+                },
+                new Category
+                {
+                    Guid = Guid.Parse("3fa82f64-8333-2332-b3fc-2e963f44afb6"),
+                    CategoryName = nameof(CategoryLevel.Reimbursement),
+                    CreatedDate = DateTime.Now,
+                    ModifiedDate = DateTime.Now
+                });
+
+            Builder.Entity<SubCategory>().HasData(
+                new SubCategory
+                {
+                    Guid = Guid.Parse("3fa85f64-2212-3322-b3fc-2c963f66afa6"),
+                    Name = "Login Issue",
+                    CategoryGuid = Guid.Parse("3fa82f64-2322-4562-b3fc-2e963f44afb6"),
+                    RiskLevel = Risk.High,
+                    CreatedDate = DateTime.Now,
+                    ModifiedDate = DateTime.Now
+                },
+                new SubCategory
+                {
+                    Guid = Guid.Parse("3fa85f64-8823-4313-b3fc-2c963f66afa6"),
+                    Name = "Forgot Password Issue",
+                    CategoryGuid = Guid.Parse("3fa82f64-2322-4562-b3fc-2e963f44afb6"),
+                    RiskLevel = Risk.High,
+                    CreatedDate = DateTime.Now,
+                    ModifiedDate = DateTime.Now
+                },
+                new SubCategory
+                {
+                    Guid = Guid.Parse("3fa85f64-2212-4444-b3fc-2c963f66afa6"),
+                    Name = "Parking Reimbursement",
+                    RiskLevel = Risk.Low,
+                    CategoryGuid = Guid.Parse("3fa82f64-8333-2332-b3fc-2e963f44afb6"),
+                    CreatedDate = DateTime.Now,
+                    ModifiedDate = DateTime.Now
+                },
+                new SubCategory
+                {
+                    Guid = Guid.Parse("3fa85f64-9213-8444-b3fc-2c963f66afa6"),
+                    Name = "Transportation Reimbursement Issue",
+                    RiskLevel = Risk.High,
+                    CategoryGuid = Guid.Parse("3fa82f64-8333-2332-b3fc-2e963f44afb6"),
+                    CreatedDate = DateTime.Now,
+                    ModifiedDate = DateTime.Now
+                },
+                new SubCategory
+                {
+                    Guid = Guid.Parse("3fa85f64-7231-2933-b3fc-2c963f66afa6"),
+                    Name = "Overtime Reimbursement Issue",
+                    RiskLevel = Risk.Medium,
+                    CategoryGuid = Guid.Parse("3fa82f64-8333-2332-b3fc-2e963f44afb6"),
+                    CreatedDate = DateTime.Now,
+                    ModifiedDate = DateTime.Now
+                });
+            
             Builder.Entity<Role>().HasData(
             new Role
             {
@@ -64,6 +127,11 @@ namespace API.Contexts
                 e.PhoneNumber
             }).IsUnique();
 
+            Builder.Entity<Ticket>().HasIndex(e => new
+            {
+                e.TicketId
+            }).IsUnique();
+
             Builder.Entity<AccountRole>().HasOne(a => a.Account)
                 .WithMany(ar => ar.AccountRoles)
                 .HasForeignKey(ar => ar.AccountGuid);
@@ -76,15 +144,15 @@ namespace API.Contexts
                 .WithOne(a => a.Account)
                 .HasForeignKey<Account>(a => a.Guid);
 
-            Builder.Entity<Complain>().HasOne(e => e.Employee)
+            Builder.Entity<Ticket>().HasOne(e => e.Employee)
                  .WithMany(c => c.Complains)
                  .HasForeignKey(c => c.EmployeeGuid);
 
-            Builder.Entity<Complain>().HasOne(e => e.Resolution)
+            Builder.Entity<Ticket>().HasOne(e => e.Resolution)
                 .WithOne(c => c.Complain)
-                .HasForeignKey<Resolution>(c => c.ComplainGuid);
+                .HasForeignKey<Resolution>(c => c.Guid);
 
-            Builder.Entity<Complain>().HasOne(e => e.SubCategory)
+            Builder.Entity<Ticket>().HasOne(e => e.SubCategory)
                 .WithMany(c => c.Complains)
                 .HasForeignKey(e => e.SubCategoryGuid);
 

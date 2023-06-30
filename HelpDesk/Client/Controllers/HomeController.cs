@@ -14,25 +14,25 @@ namespace Client.Controllers
             _logger = logger;
         }
 
-        [Authorize(Roles = "User")]
-        public IActionResult Index()
+/*        [Authorize(Roles = "User")]
+*/        public IActionResult Index()
         {
             return View();
         }
 
-        [Authorize(Roles = "Admin")]
-        public IActionResult Admin()
+/*        [Authorize(Roles = "Admin")]
+*/        public IActionResult Admin()
         {
             return View();
         }
 
-        [Authorize(Roles = "Developer")]
-        public IActionResult Developer()
+  /*      [Authorize(Roles = "Developer")]
+  */      public IActionResult Developer()
         {
             return View();
         }        
-        [Authorize(Roles = "Finance")]
-        public IActionResult Finance()
+    /*    [Authorize(Roles = "Finance")]
+    */    public IActionResult Finance()
         {
             return View();
         }

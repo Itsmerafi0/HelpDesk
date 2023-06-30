@@ -9,17 +9,14 @@ namespace API.Models
         public StatusLevel Status { get; set; }
 
         [Column("notes")]
-        public string Notes { get; set; }
+        public string? Notes { get; set; }
 
         [Column("finished_date")]
-        public DateTime FinishedDate { get; set; }
-
-        [Column("complain_guid")]
-        public Guid ComplainGuid { get; set; }
+        public DateTime? FinishedDate { get; set; }
 
         //Cardinality
 
-        public Complain? Complain { get; set; }
+        public Ticket? Complain { get; set; }
     }
 
 

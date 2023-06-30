@@ -2,7 +2,9 @@
 {
     public enum Risk
     {
-        Urgent,
-        Plans
+        Low,
+        Medium, 
+        High
+
     }
 }

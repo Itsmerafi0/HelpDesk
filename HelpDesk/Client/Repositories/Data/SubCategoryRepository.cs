@@ -1,5 +1,7 @@
 ﻿using Client.Models;
 using Client.Repositories.Interface;
+using Client.ViewModels;
+using Newtonsoft.Json;
 
 namespace Client.Repositories.Data
 {
@@ -15,6 +17,19 @@ namespace Client.Repositories.Data
             {
                 BaseAddress = new Uri("https://localhost:7024/api/")
             };
+
         }
+
+        public async Task<ResponseListVM<SubCategoryDetailVM>> GetAllSub()
+        {
+            ResponseListVM<SubCategoryDetailVM> entityVM = null;
+            using (var response = httpClient.GetAsync(request + "Detail").Result)
+            {
+                string apiResponse = await response.Content.ReadAsStringAsync();
+                entityVM = JsonConvert.DeserializeObject<ResponseListVM<SubCategoryDetailVM>>(apiResponse);
+            }
+            return entityVM;
+        }
+
     }
 }
