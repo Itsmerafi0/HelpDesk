@@ -6,11 +6,14 @@ using API.ViewModel.Response;
 using API.ViewModel.SubCategory;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using Microsoft.AspNetCore.Authorization;
+using API.Utility;
 
 namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+
     public class SubCategoryController : BaseController<SubCategory, SubCategoryVM>
     {
         private readonly ISubCategoryRepository _subCategoryRepository;
@@ -21,7 +24,7 @@ namespace API.Controllers
             _subCategoryRepository = subCategoryRepository;
             _subCategoryMapper = subCategoryMapper;
         }
-
+        [Authorize(Roles = "Admin,User")]
         [HttpGet("Detail")]
         public IActionResult GetSubCategoryDetail()
         {

@@ -4,6 +4,7 @@ using API.Repository;
 using API.ViewModel.Account;
 using API.ViewModel.Employees;
 using API.ViewModel.Response;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -11,6 +12,9 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+
+
+    [Authorize(Roles = "Admin")]
     public class EmployeeController : BaseController<Employee, EmployeeVM>
     {
         private readonly IEmployeeRepository _employeeRepository;
@@ -21,6 +25,7 @@ namespace API.Controllers
             _employeeRepository = employeeRepository;
             _mapper = mapper;
         }
+
         [HttpPost("Register")]
 
         public IActionResult Register(RegisterVM registerVM)

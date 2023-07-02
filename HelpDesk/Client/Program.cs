@@ -71,6 +71,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Ticket}/{action=CreateTicket}/{id?}");
+    pattern: "{controller=Account}/{action=Logins}/{id?}");
 
 app.Run();

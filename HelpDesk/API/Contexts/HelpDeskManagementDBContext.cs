@@ -149,7 +149,7 @@ namespace API.Contexts
                  .HasForeignKey(c => c.EmployeeGuid);
 
             Builder.Entity<Ticket>().HasOne(e => e.Resolution)
-                .WithOne(c => c.Complain)
+                .WithOne(c => c.Complains)
                 .HasForeignKey<Resolution>(c => c.Guid);
 
             Builder.Entity<Ticket>().HasOne(e => e.SubCategory)
@@ -159,6 +159,11 @@ namespace API.Contexts
             Builder.Entity<Category>().HasMany(e => e.SubCategories)
                 .WithOne(c => c.Category)
                 .HasForeignKey(e => e.CategoryGuid);
+
+            Builder.Entity<Resolution>().HasOne(e => e.Employee)
+                .WithMany(r => r.Resolutions)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasForeignKey(r => r.ResolvedBy);
 
         }
     }

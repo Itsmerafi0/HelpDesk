@@ -1,10 +1,12 @@
 ﻿using Client.Models;
 using Client.Repositories.Interface;
 using Client.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Client.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class SubCategoryController : Controller
     {
         private readonly ISubCategoryRepository repository;
@@ -35,7 +37,8 @@ namespace Client.Controllers
         }
         public async Task<IActionResult> GetAllSub()
         {
-            var result = await repository.GetAllSub();
+            string jwToken = HttpContext.Session.GetString("JWToken") ?? "JWT is null";
+            var result = await repository.GetAllSub(jwToken);
             var subcategories = new List<SubCategoryDetailVM>();
 
             if (result.Data != null)

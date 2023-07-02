@@ -4,14 +4,16 @@ using API.Models;
 using API.ViewModel.Ticket;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Sockets;
+using System.Security.Claims;
 
 namespace API.Repository
 {
     public class TicketRepository : GeneralRepository<Ticket>, ITicketRepository
     {
-        public TicketRepository(HelpDeskManagementDBContext dbContext) : base(dbContext)
+        private readonly IHttpContextAccessor _contextAccessor;
+        public TicketRepository(HelpDeskManagementDBContext dbContext, IHttpContextAccessor contextAccessor) : base(dbContext)
         {
-
+            _contextAccessor = contextAccessor;
         }
         public IEnumerable<TicketDetailVM> GetAllComplainDetail()
         {
@@ -69,13 +71,16 @@ namespace API.Repository
             var resolutions = _dbContext.Resolutions.ToList();
             var categories = _dbContext.Categories.ToList();
 
+/*            Guid employeeGuid = new Guid("69de0986-1bd4-4237-8af2-08db797341b9");
+*/
+            var employeeGuid = Guid.Parse(_contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier));
 
             var complainDetails = from c in complains
                                   join e in employees on c.EmployeeGuid equals e.Guid
                                   join r in resolutions on c.Guid equals r.Guid
                                   join s in subcategories on c.SubCategoryGuid equals s.Guid
                                   join t in categories on s.CategoryGuid equals t.Guid
-                                  where t.CategoryName == "Access"
+                                  where t.CategoryName == "Access" && e.Guid == employeeGuid
                                   select new
                                   {
                                       c.Guid,
@@ -90,6 +95,7 @@ namespace API.Repository
                                       r.Notes,
                                       r.FinishedDate
                                   };
+
             var details = new List<GetTicketForDevVM>();
             foreach (var complainDetail in complainDetails)
             {
@@ -106,7 +112,6 @@ namespace API.Repository
                     Description = complainDetail.Description,
                     ResolutionNote = complainDetail.Notes,
                     FinishDate = complainDetail.FinishedDate
-                    
                 };
                 details.Add(detail);
             }

@@ -1,8 +1,10 @@
 ﻿using API.Contracs;
 using API.Models;
 using API.Repository;
+using API.Utility;
 using API.ViewModel.Response;
 using API.ViewModel.Ticket;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -15,6 +17,7 @@ public class TicketController : BaseController<Ticket, TicketVM>
     private readonly ITicketRepository _complainRepository;
     private readonly IMapper<Ticket, TicketVM> _mapper;
 
+
     public TicketController(ITicketRepository Complainrepository,
     IMapper<Ticket, TicketVM> mapper) : base(Complainrepository, mapper)
     {
@@ -24,13 +27,13 @@ public class TicketController : BaseController<Ticket, TicketVM>
     }
 
     [HttpGet("TicketDetail")]
+    [Authorize(Roles = "Admin")]
     public IActionResult GetAllComplainDetail()
     {
         try
         {
 
             var results = _complainRepository.GetAllComplainDetail();
-
             return Ok(new ResponseVM<List<TicketDetailVM>>
             {
                 Code = StatusCodes.Status200OK,
@@ -50,7 +53,8 @@ public class TicketController : BaseController<Ticket, TicketVM>
         }
 
     }
-
+    
+    [Authorize(Roles = "Admin")]
     [HttpGet("TicketDetailDeveloper")]
     public IActionResult GetAllComplainDev()
     {
@@ -58,7 +62,7 @@ public class TicketController : BaseController<Ticket, TicketVM>
         {
 
             var results = _complainRepository.GetAllComplainDev();
-
+            
             return Ok(new ResponseVM<List<GetTicketForDevVM>>
             {
                 Code = StatusCodes.Status200OK,
@@ -77,7 +81,7 @@ public class TicketController : BaseController<Ticket, TicketVM>
             });
         }
     }
-
+    [Authorize(Roles = "Finance")]
     [HttpGet("TicketDetailFinance")]
     public IActionResult GetAllComplainFinance()
     {
@@ -105,9 +109,12 @@ public class TicketController : BaseController<Ticket, TicketVM>
         }
     }
 
+    [Authorize]
     [HttpPost("CreateTicket")]
     public IActionResult CreateReso(TicketResoVM complainresoVM)
     {
+        var employeeGuid = complainresoVM.EmployeeGuid;
+
         var results = _complainRepository.CreateTicketResolution(complainresoVM);
         switch (results)
         {

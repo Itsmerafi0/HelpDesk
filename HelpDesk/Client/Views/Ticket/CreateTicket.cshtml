@@ -2,7 +2,11 @@
 
 @{
     ViewData["Title"] = "CreateTicket";
+    var Guid = ViewData["EmployeeGuid"];
+    var jwToken = ViewData["JWToken"];
+
 }
+
 
 <h1>CreateTicket</h1>
 
@@ -13,9 +17,9 @@
         <form asp-action="CreateTicket">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-           <label asp-for="SubCategoryGuid" class="control-label"></label>
-                <input asp-for="SubCategoryGuid" class="form-control" />
-            <span asp-validation-for="SubCategoryGuid" class="text-danger"></span>
+                <label asp-for="SubCategoryGuid" class="control-label"></label>
+                <select asp-for="SubCategoryGuid" class="form-control" id="myDropdown"></select>
+                <span asp-validation-for="SubCategoryGuid" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
@@ -30,7 +34,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="EmployeeGuid" class="control-label"></label>
-                <input asp-for="EmployeeGuid" class="form-control" />
+                <input asp-for="EmployeeGuid" value="@Guid" class="form-control"/>                
                 <span asp-validation-for="EmployeeGuid" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -43,6 +47,10 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+
+<script>
+    let jwToken = "@jwToken";
+</script>
 
 @section Scripts {
     <script>
@@ -60,6 +68,32 @@
                 reader.readAsArrayBuffer(file);
             }
         }
+
+        fetch('https://localhost:7024/api/SubCategory/Detail', {
+            method: 'GET',
+            dataType: 'json',
+            headers: {
+                'Authorization': 'Bearer ' + jwToken
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                // Get the select element
+                const dropdown = document.getElementById('myDropdown');
+
+                // Loop through the data and create option elements
+                data.data.forEach(subCategory => {
+                    const option = document.createElement('option');
+                    option.value = subCategory.guid; // Set the value to the subCategory guid
+                    option.text = subCategory.name; // Set the text to the subCategory name
+                    dropdown.appendChild(option); // Append the option to the select element
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+
     </script>
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

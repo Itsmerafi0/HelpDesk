@@ -117,8 +117,9 @@ namespace Client.Controllers
         }
         public async Task<IActionResult> Registers(RegisterVM registerVM)
         {
+            string jwToken = HttpContext.Session.GetString("JWToken") ?? "JWT is null";
 
-            var result = await repository.Registers(registerVM);
+            var result = await repository.Registers(registerVM,jwToken);
             if (result is null)
             {
                 return RedirectToAction("Error", "Home");

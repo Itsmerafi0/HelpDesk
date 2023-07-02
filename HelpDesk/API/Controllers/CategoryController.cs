@@ -1,6 +1,7 @@
 ﻿using API.Contracs;
 using API.Models;
 using API.ViewModel.Category;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -8,6 +9,7 @@ namespace API.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 
+[Authorize(Roles ="Admin,User")]
 public class CategoryController : BaseController<Category, CategoryVM>
 {
     private readonly ICategoryRepository _categoryRepository;

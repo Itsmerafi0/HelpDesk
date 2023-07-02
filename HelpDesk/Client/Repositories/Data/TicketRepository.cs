@@ -2,6 +2,8 @@
 using Client.Repositories.Interface;
 using Client.ViewModels;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace Client.Repositories.Data
@@ -30,9 +32,11 @@ namespace Client.Repositories.Data
             }
             return entityVM;
         } 
-        public async Task<ResponseListVM<GetTicketForDevVM>> GetAllTicketDev()
+        public async Task<ResponseListVM<GetTicketForDevVM>> GetAllTicketDev(string jwtToken)
         {
             ResponseListVM<GetTicketForDevVM> entityVM = null;
+
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
             using (var response = httpClient.GetAsync(request + "TicketDetailDeveloper").Result)
             {
                 string apiResponse = await response.Content.ReadAsStringAsync();
@@ -40,8 +44,9 @@ namespace Client.Repositories.Data
             }
             return entityVM;
         }  
-        public async Task<ResponseListVM<GetTicketForFinance>> GetAllTicketFinance()
+        public async Task<ResponseListVM<GetTicketForFinance>> GetAllTicketFinance(string jwtToken)
         {
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
             ResponseListVM<GetTicketForFinance> entityVM = null;
             using (var response = httpClient.GetAsync(request + "TicketDetailFinance").Result)
             {
@@ -51,8 +56,9 @@ namespace Client.Repositories.Data
             return entityVM;
         }
 
-        public async Task<ResponseMessageVM> CreateTicket(TicketResoVM entity)
+        public async Task<ResponseMessageVM> CreateTicket(TicketResoVM entity, string jwToken)
         {
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwToken);
             ResponseMessageVM entityVM = null;
             StringContent content = new StringContent(JsonConvert.SerializeObject(entity), Encoding.UTF8, "application/json");
             using (var response = httpClient.PostAsync(request + "CreateTicket", content).Result)

@@ -3,7 +3,9 @@ using API.Models;
 using API.Utility;
 using API.ViewModel.Resolution;
 using API.ViewModel.Response;
+using API.ViewModel.Role;
 using API.ViewModel.Ticket;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 
@@ -11,6 +13,9 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+
+    [Authorize(Roles = "Admin")]
+
     public class ResolutionController : BaseController<Resolution, ResolutionVM>
     {
         private readonly IResolutionRepository _resolutionRepository;

@@ -1,6 +1,6 @@
 $(document).ready(function () {
     loadTicketDetails();
-
+    
     $('#ticketsTable').on('click', '.status-cell', function () {
         var row = $(this).closest('tr');
         var ticketGuid = row.data('ticket-guid');
@@ -39,10 +39,14 @@ $(document).ready(function () {
 })
 
 function loadTicketDetails() {
+
     $.ajax({
         url: 'https://localhost:7024/api/Ticket/TicketDetail',
         type: 'GET',
         dataType: 'json',
+        headers: {
+            'Authorization': 'Bearer ' + jwToken
+        },
         success: function(response) {
             var tickets = response.data;
             console.log('Tickets:', tickets); // Console log the response data
@@ -108,7 +112,11 @@ function updateComplaintStatus(ticketGuid, newStatus) {
             ticketGuid: ticketGuid,
             newStatus: newStatus
         }),
-        dataType: 'json'
+        dataType: 'json',
+                headers: {
+            'Authorization': 'Bearer ' + jwToken
+        },
+
     });
 }
 

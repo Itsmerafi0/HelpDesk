@@ -11,8 +11,7 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller")]
-/*    [Authorize]
-*/
+
 
     public class BaseController<TModel, TViewModel> : ControllerBase
         {
@@ -25,8 +24,8 @@ namespace API.Controllers
                 _mapper = mapper;
             }
 
-
-            [HttpGet]
+        [HttpGet]
+        [Authorize(Roles ="Admin,User")]
             public IActionResult GetAll()
             {
                 var models = _repository.GetAll();
@@ -52,7 +51,8 @@ namespace API.Controllers
             }
 
             [HttpGet("{guid}")]
-            public IActionResult GetByGuid(Guid guid)
+        [Authorize(Roles = "Admin")]
+        public IActionResult GetByGuid(Guid guid)
             {
                 var model = _repository.GetByGuid(guid);
                 if (model is null)
@@ -77,7 +77,9 @@ namespace API.Controllers
             }
 
             [HttpPost]
-            public IActionResult Create(TViewModel viewModel)
+        [Authorize(Roles = "Admin")]
+
+        public IActionResult Create(TViewModel viewModel)
             {
                 var model = _mapper.Map(viewModel);
                 var result = _repository.Create(model);
@@ -124,7 +126,9 @@ namespace API.Controllers
             }
 
             [HttpDelete("{guid}")]
-            public IActionResult Delete(Guid guid)
+        [Authorize(Roles = "Admin")]
+
+        public IActionResult Delete(Guid guid)
             {
                 var isDeleted = _repository.Delete(guid);
                 if (!isDeleted)

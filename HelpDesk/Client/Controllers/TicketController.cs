@@ -2,17 +2,20 @@
 using Client.Repositories.Interface;
 using Client.Utility;
 using Client.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Client.Controllers
 {
     public class TicketController : Controller
     {
         private readonly ITicketRepository repository;
-
-        public TicketController(ITicketRepository repository)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public TicketController(ITicketRepository repository, IHttpContextAccessor httprepository)
         {
             this.repository = repository;
+            this._httpContextAccessor = httprepository;
         }
 
         public async Task<IActionResult> Index()
@@ -114,13 +117,19 @@ namespace Client.Controllers
 
             return View();
         }
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> GetAllTicketDetails()
         {
+            string jwToken = HttpContext.Session.GetString("JWToken") ?? "JWT is null";
+            ViewData["JWToken"] = jwToken;
+
             return View();
         }
          public async Task<IActionResult> GetAllTicketDev()
         {
-            var complainResult = await repository.GetAllTicketDev();
+            string jwToken = HttpContext.Session.GetString("JWToken") ?? "JWT is null";
+
+            var complainResult = await repository.GetAllTicketDev(jwToken);
             var complains = new List<GetTicketForDevVM>();
 
             if (complainResult.Data != null)
@@ -146,7 +155,9 @@ namespace Client.Controllers
         } 
         public async Task<IActionResult> GetAllTicketFinance()
         {
-            var complainResult = await repository.GetAllTicketFinance();
+            string jwToken = HttpContext.Session.GetString("JWToken") ?? "JWT is null";
+
+            var complainResult = await repository.GetAllTicketFinance(jwToken);
             var complains = new List<GetTicketForFinance>();
 
             if (complainResult.Data != null)
@@ -206,14 +217,22 @@ namespace Client.Controllers
         [HttpGet]
         public async Task<IActionResult> CreateTicket()
         {
+
+            var ticketresoVM = Guid.Parse(_httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            ViewData["EmployeeGuid"] = ticketresoVM;
+
+            string jwToken = HttpContext.Session.GetString("JWToken") ?? "JWT is null";
+            ViewData["JWToken"] = jwToken;
+
             return View();
         }
         
         [HttpPost]
         public async Task<IActionResult> CreateTicket(TicketResoVM ticketResoVM)
         {
-
-            var result = await repository.CreateTicket(ticketResoVM);
+            string jwToken = HttpContext.Session.GetString("JWToken") ?? "JWT is null";
+            var result = await repository.CreateTicket(ticketResoVM,jwToken);
             if (result is null)
             {
                 return RedirectToAction("Error", "Home");

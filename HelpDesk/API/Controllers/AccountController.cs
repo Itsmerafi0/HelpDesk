@@ -59,7 +59,7 @@ public class AccountController : BaseController<Account, AccountVM>
 
         var claims = new List<Claim>
             {
-                new(ClaimTypes.NameIdentifier, employee.Nik),
+                new(ClaimTypes.NameIdentifier, employee.Guid.ToString()),
                 new(ClaimTypes.Name, $"{employee.FirstName}{employee.LastName}"),
                 new(ClaimTypes.Email, employee.Email),
             };

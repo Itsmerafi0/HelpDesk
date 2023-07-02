@@ -2,6 +2,8 @@
 using Client.Repositories.Interface;
 using Client.ViewModels;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Net.Http.Headers;
 
 namespace Client.Repositories.Data
 {
@@ -20,8 +22,9 @@ namespace Client.Repositories.Data
 
         }
 
-        public async Task<ResponseListVM<SubCategoryDetailVM>> GetAllSub()
+        public async Task<ResponseListVM<SubCategoryDetailVM>> GetAllSub(string jwtToken)
         {
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
             ResponseListVM<SubCategoryDetailVM> entityVM = null;
             using (var response = httpClient.GetAsync(request + "Detail").Result)
             {
