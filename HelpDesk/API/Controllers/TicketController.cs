@@ -12,13 +12,13 @@ namespace API.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 
-public class TicketController : BaseController<Ticket, TicketVM>
+public class ticketController : BaseController<Ticket, TicketVM>
 {
     private readonly ITicketRepository _complainRepository;
     private readonly IMapper<Ticket, TicketVM> _mapper;
 
 
-    public TicketController(ITicketRepository Complainrepository,
+    public ticketController(ITicketRepository Complainrepository,
     IMapper<Ticket, TicketVM> mapper) : base(Complainrepository, mapper)
     {
         _mapper = mapper;
@@ -26,7 +26,7 @@ public class TicketController : BaseController<Ticket, TicketVM>
 
     }
 
-    [HttpGet("TicketDetail")]
+    [HttpGet("ticketdetail")]
     [Authorize(Roles = "Admin")]
     public IActionResult GetAllComplainDetail()
     {
@@ -54,7 +54,7 @@ public class TicketController : BaseController<Ticket, TicketVM>
 
     }
     
-    [HttpGet("TicketDetailDeveloper")]
+    [HttpGet("ticketdetaildeveloper")]
     [Authorize(Roles = "Admin")]
     public IActionResult GetAllComplainDev()
     {
@@ -80,8 +80,36 @@ public class TicketController : BaseController<Ticket, TicketVM>
                 Message = "Data not found"
             });
         }
+    } 
+    
+    [HttpGet("ticketdetailuser")]
+    [Authorize]
+    public IActionResult GetAllComplainUser()
+    {
+        try
+        {
+
+            var results = _complainRepository.GetAllComplainUser();
+            
+            return Ok(new ResponseVM<List<GetComplainForUserVM>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Get all complain detail succeed",
+                Data = results.ToList()
+            });
+        }
+        catch
+        {
+            return NotFound(new ResponseVM<GetComplainForUserVM>
+            {
+                Code = StatusCodes.Status404NotFound,
+                Status = HttpStatusCode.NotFound.ToString(),
+                Message = "Data not found"
+            });
+        }
     }
-    [HttpGet("TicketDetailFinance")]
+    [HttpGet("ticketdetailfinance")]
     [Authorize(Roles = "Finance")]
     public IActionResult GetAllComplainFinance()
     {
@@ -109,7 +137,7 @@ public class TicketController : BaseController<Ticket, TicketVM>
         }
     }
 
-    [HttpPost("CreateTicket")]
+    [HttpPost("createticket")]
     [Authorize]
     public IActionResult CreateReso(TicketResoVM complainresoVM)
     {

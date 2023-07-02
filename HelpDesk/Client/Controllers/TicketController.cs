@@ -1,6 +1,5 @@
 ﻿using Client.Models;
 using Client.Repositories.Interface;
-using Client.Utility;
 using Client.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +17,7 @@ namespace Client.Controllers
             this._httpContextAccessor = httprepository;
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             string jwToken = HttpContext.Session.GetString("JWToken") ?? "JWT is null";
@@ -96,6 +96,7 @@ namespace Client.Controllers
          }*/
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Creates()
         {
             return View();
@@ -103,6 +104,7 @@ namespace Client.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Creates(Ticket complain)
         {
             var result = await repository.Posts(complain);
@@ -118,6 +120,7 @@ namespace Client.Controllers
 
             return View();
         }
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllTicketDetails()
         {
             string jwToken = HttpContext.Session.GetString("JWToken") ?? "JWT is null";
@@ -125,7 +128,8 @@ namespace Client.Controllers
 
             return View();
         }
-         public async Task<IActionResult> GetAllTicketDev()
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetAllTicketDev()
         {
             string jwToken = HttpContext.Session.GetString("JWToken") ?? "JWT is null";
 
@@ -153,6 +157,35 @@ namespace Client.Controllers
 
             return View(complains);
         } 
+
+
+        [Authorize]
+        public async Task<IActionResult> GetAllTicketUser()
+        {
+            string jwToken = HttpContext.Session.GetString("JWToken") ?? "JWT is null";
+
+            var complainResult = await repository.GetAllTicketUser(jwToken);
+            var complains = new List<GetComplainForUserVM>();
+
+            if (complainResult.Data != null)
+            {
+                complains = complainResult.Data.Select(c => new GetComplainForUserVM
+                {
+                  Guid= c.Guid,
+                  TicketId= c.TicketId,
+                  Requester= c.Requester,
+                  Description = c.Description,
+                  Attachment = c.Attachment,
+                  CategoryName = c.CategoryName,
+                  SubCategoryName= c.SubCategoryName,
+                  StatusLevel = c.StatusLevel
+                }).ToList();
+            }
+
+
+            return View(complains);
+        }
+        [Authorize(Roles = "Finance")]
         public async Task<IActionResult> GetAllTicketFinance()
         {
             string jwToken = HttpContext.Session.GetString("JWToken") ?? "JWT is null";
@@ -180,7 +213,7 @@ namespace Client.Controllers
 
             return View(complains);
         }
-
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Deletes(Guid guid)
         {
             var result = await repository.Gets(guid);
@@ -205,6 +238,7 @@ namespace Client.Controllers
 
         [HttpPost]
         //   [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Remove(Guid guid)
         {
             var result = await repository.Deletes(guid);
@@ -215,6 +249,7 @@ namespace Client.Controllers
             return View();
         }
         [HttpGet]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> CreateTicket()
         {
 
@@ -229,6 +264,7 @@ namespace Client.Controllers
         }
         
         [HttpPost]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> CreateTicket(TicketResoVM ticketResoVM)
         {
             string jwToken = HttpContext.Session.GetString("JWToken") ?? "JWT is null";

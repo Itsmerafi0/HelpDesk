@@ -1,6 +1,6 @@
 ﻿using API.Utility;
 
-namespace API.ViewModel.Employees
+namespace API.ViewModel.Ticket
 {
     public class GetComplainForUserVM
     {

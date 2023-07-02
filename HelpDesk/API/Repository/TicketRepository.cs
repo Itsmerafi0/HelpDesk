@@ -18,7 +18,7 @@ namespace API.Repository
 
         public bool CheckTicket(string value)
         {
-            return _dbContext.Complains.Any(e => e.TicketId == value);
+            return _dbContext.Tickets.Any(e => e.TicketId == value);
         }
 
 
@@ -80,14 +80,14 @@ namespace API.Repository
 
 /*            Guid employeeGuid = new Guid("69de0986-1bd4-4237-8af2-08db797341b9");
 */
-            var employeeGuid = Guid.Parse(_contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier));
-
+/*            var employeeGuid = Guid.Parse(_contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier));
+*/
             var complainDetails = from c in complains
                                   join e in employees on c.EmployeeGuid equals e.Guid
                                   join r in resolutions on c.Guid equals r.Guid
                                   join s in subcategories on c.SubCategoryGuid equals s.Guid
                                   join t in categories on s.CategoryGuid equals t.Guid
-                                  where t.CategoryName == "Access" && e.Guid == employeeGuid
+                                  where t.CategoryName == "Access"
                                   select new
                                   {
                                       c.Guid,
@@ -119,6 +119,55 @@ namespace API.Repository
                     Description = complainDetail.Description,
                     ResolutionNote = complainDetail.Notes,
                     FinishDate = complainDetail.FinishedDate
+                };
+                details.Add(detail);
+            }
+            return details;
+        }  
+        
+        public IEnumerable<GetComplainForUserVM> GetAllComplainUser()
+        {
+            var complains = GetAll();
+            var employees = _dbContext.Employees.ToList();
+            var subcategories = _dbContext.SubCategories.ToList();
+            var resolutions = _dbContext.Resolutions.ToList();
+            var categories = _dbContext.Categories.ToList();
+
+/*            Guid employeeGuid = new Guid("69de0986-1bd4-4237-8af2-08db797341b9");
+*/
+            var employeeGuid = Guid.Parse(_contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            var complainDetails = from c in complains
+                                  join e in employees on c.EmployeeGuid equals e.Guid
+                                  join r in resolutions on c.Guid equals r.Guid
+                                  join s in subcategories on c.SubCategoryGuid equals s.Guid
+                                  join t in categories on s.CategoryGuid equals t.Guid
+                                  where e.Guid == employeeGuid
+                                  select new
+                                  {
+                                      c.Guid,
+                                      c.TicketId,
+                                      Requester = e.FirstName + " " + e.LastName,
+                                      c.Description,
+                                      c.Attachment,
+                                      t.CategoryName,
+                                      s.Name,
+                                      r.Status
+                                  };
+
+            var details = new List<GetComplainForUserVM>();
+            foreach (var complainDetail in complainDetails)
+            {
+                var detail = new GetComplainForUserVM
+                {
+                    Guid = complainDetail.Guid,
+                    TicketId = complainDetail.TicketId,
+                    Requester = complainDetail.Requester,
+                    Description = complainDetail.Description,
+                    Attachment = complainDetail.Attachment,
+                    CategoryName = complainDetail.CategoryName,
+                    SubCategoryName = complainDetail.Name,
+                    StatusLevel = complainDetail.Status
                 };
                 details.Add(detail);
             }

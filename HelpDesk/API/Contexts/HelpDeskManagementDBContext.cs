@@ -14,7 +14,7 @@ namespace API.Contexts
 
         public DbSet<Account> Accounts { get; set; }
         public DbSet<AccountRole> AccountRoles { get; set; }
-        public DbSet<Ticket> Complains { get; set; }
+        public DbSet<Ticket> Tickets { get; set; }
 
         public DbSet<Category> Categories { get; set; }
 

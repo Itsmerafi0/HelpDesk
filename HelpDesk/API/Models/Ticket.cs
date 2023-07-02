@@ -15,7 +15,7 @@ namespace API.Models
         public string Description { get; set; }
 
         [Column("attachment")]
-        public byte[]? Attachment { get; set; }
+        public byte[] Attachment { get; set; }
 
         [Column("employee_guid")]
         public Guid EmployeeGuid { get; set; }

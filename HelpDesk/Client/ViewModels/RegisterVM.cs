@@ -1,5 +1,5 @@
 ﻿
-using Client.Utility;
+using Client.Utitlity;
 using System.ComponentModel.DataAnnotations;
 
 namespace Client.ViewModels

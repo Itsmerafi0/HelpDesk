@@ -14,17 +14,17 @@ namespace API.Controllers
     [ApiController]
     [Route("api/[controller]")]
 
-    public class SubCategoryController : BaseController<SubCategory, SubCategoryVM>
+    public class subcategoryController : BaseController<SubCategory, SubCategoryVM>
     {
         private readonly ISubCategoryRepository _subCategoryRepository;
         private readonly IMapper<SubCategory, SubCategoryVM> _subCategoryMapper;
 
-        public SubCategoryController(ISubCategoryRepository subCategoryRepository, IMapper<SubCategory, SubCategoryVM> subCategoryMapper) : base(subCategoryRepository, subCategoryMapper)
+        public subcategoryController(ISubCategoryRepository subCategoryRepository, IMapper<SubCategory, SubCategoryVM> subCategoryMapper) : base(subCategoryRepository, subCategoryMapper)
         {
             _subCategoryRepository = subCategoryRepository;
             _subCategoryMapper = subCategoryMapper;
         }
-        [HttpGet("Detail")]
+        [HttpGet("detail")]
         [Authorize]
         public IActionResult GetSubCategoryDetail()
         {

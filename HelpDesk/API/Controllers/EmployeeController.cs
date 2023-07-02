@@ -14,18 +14,18 @@ namespace API.Controllers
     [Route("api/[controller]")]
 
 
-    public class EmployeeController : BaseController<Employee, EmployeeVM>
+    public class employeeController : BaseController<Employee, EmployeeVM>
     {
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IMapper<Employee, EmployeeVM> _mapper;
 
-        public EmployeeController(IEmployeeRepository employeeRepository, IMapper<Employee, EmployeeVM> mapper) : base(employeeRepository, mapper)
+        public employeeController(IEmployeeRepository employeeRepository, IMapper<Employee, EmployeeVM> mapper) : base(employeeRepository, mapper)
         {
             _employeeRepository = employeeRepository;
             _mapper = mapper;
         }
 
-        [HttpPost("Register")]
+        [HttpPost("register")]
         [Authorize(Roles = "Admin")]
         public IActionResult Register(RegisterVM registerVM)
         {
@@ -71,7 +71,7 @@ namespace API.Controllers
             });
         }
 
-        [HttpGet("ComplainDetailUser")]
+/*        [HttpGet("ComplainDetailUser")]
 
         public IActionResult GetAllComplainUser(Guid guid)
         {
@@ -98,5 +98,5 @@ namespace API.Controllers
             }
 
         }
-    }
+*/    }
 }

@@ -13,7 +13,7 @@ namespace Client.Repositories.Data
         private readonly HttpClient httpClient;
         private readonly string request;
 
-        public TicketRepository(string request = "Ticket/") : base(request)
+        public TicketRepository(string request = "ticket/") : base(request)
         {
             this.request = request;
             httpClient = new HttpClient
@@ -25,7 +25,7 @@ namespace Client.Repositories.Data
         public async Task<ResponseListVM<TicketDetailVM>> GetAllTicketDetails()
         {
             ResponseListVM<TicketDetailVM> entityVM = null;
-            using (var response = httpClient.GetAsync(request + "TicketDetail").Result)
+            using (var response = httpClient.GetAsync(request + "ticketdetail").Result)
             {
                 string apiResponse = await response.Content.ReadAsStringAsync();
                 entityVM = JsonConvert.DeserializeObject<ResponseListVM<TicketDetailVM>>(apiResponse);
@@ -37,10 +37,22 @@ namespace Client.Repositories.Data
             ResponseListVM<GetTicketForDevVM> entityVM = null;
 
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
-            using (var response = httpClient.GetAsync(request + "TicketDetailDeveloper").Result)
+            using (var response = httpClient.GetAsync(request + "ticketdetaildeveloper").Result)
             {
                 string apiResponse = await response.Content.ReadAsStringAsync();
                 entityVM = JsonConvert.DeserializeObject<ResponseListVM<GetTicketForDevVM>>(apiResponse);
+            }
+            return entityVM;
+        }  
+        public async Task<ResponseListVM<GetComplainForUserVM>> GetAllTicketUser(string jwtToken)
+        {
+            ResponseListVM<GetComplainForUserVM> entityVM = null;
+
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
+            using (var response = httpClient.GetAsync(request + "ticketdetailuser").Result)
+            {
+                string apiResponse = await response.Content.ReadAsStringAsync();
+                entityVM = JsonConvert.DeserializeObject<ResponseListVM<GetComplainForUserVM>>(apiResponse);
             }
             return entityVM;
         }  
@@ -48,7 +60,7 @@ namespace Client.Repositories.Data
         {
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
             ResponseListVM<GetTicketForFinance> entityVM = null;
-            using (var response = httpClient.GetAsync(request + "TicketDetailFinance").Result)
+            using (var response = httpClient.GetAsync(request + "ticketdetailfinance").Result)
             {
                 string apiResponse = await response.Content.ReadAsStringAsync();
                 entityVM = JsonConvert.DeserializeObject<ResponseListVM<GetTicketForFinance>>(apiResponse);
@@ -61,7 +73,7 @@ namespace Client.Repositories.Data
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwToken);
             ResponseMessageVM entityVM = null;
             StringContent content = new StringContent(JsonConvert.SerializeObject(entity), Encoding.UTF8, "application/json");
-            using (var response = httpClient.PostAsync(request + "CreateTicket", content).Result)
+            using (var response = httpClient.PostAsync(request + "createticket", content).Result)
             {
                 string apiResponse = await response.Content.ReadAsStringAsync();
                 entityVM = JsonConvert.DeserializeObject<ResponseMessageVM>(apiResponse);

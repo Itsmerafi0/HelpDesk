@@ -108,13 +108,13 @@ namespace API.Repository
             return "100000";
         }
 
-        public GetComplainForUserVM GetAllComplainUser(Guid guid)
+/*        public GetComplainForUserVM GetAllComplainUser(Guid guid)
         {
             var employee = GetByGuid(guid);
             var complain = _dbContext.Complains.FirstOrDefault(e => e.EmployeeGuid == guid);
             var subCategory = _dbContext.SubCategories.FirstOrDefault(sb => sb.Guid == complain.SubCategoryGuid);
             var category = _dbContext.Categories.FirstOrDefault(c => c.Guid == subCategory.CategoryGuid);
-            /*     var resolution = _dbContext.Resolutions.FirstOrDefault(r => r.Guid ==complain.Guid);*/
+            *//*     var resolution = _dbContext.Resolutions.FirstOrDefault(r => r.Guid ==complain.Guid);*//*
 
             var data = new GetComplainForUserVM
             {
@@ -123,9 +123,9 @@ namespace API.Repository
                 Attachment = complain.Attachment,
                 CategoryName = category.CategoryName,
                 SubCategoryName = subCategory.Name,
-                /*StatusLevel = resolution.Status*/
+                *//*StatusLevel = resolution.Status*//*
             };
             return data;
         }
-    }
+*/    }
 }

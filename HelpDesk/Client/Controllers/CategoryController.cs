@@ -1,5 +1,6 @@
 ﻿using Client.Models;
 using Client.Repositories.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Client.Controllers
@@ -16,6 +17,7 @@ namespace Client.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> Index()
         {
             string jwToken = HttpContext.Session.GetString("JWToken") ?? "JWT is null";
@@ -34,6 +36,7 @@ namespace Client.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Creates()
         {
             return View();
@@ -41,6 +44,7 @@ namespace Client.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Creates(Category category)
         {
             var result = await repository.Posts(category);
@@ -57,6 +61,7 @@ namespace Client.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Deletes(Guid guid)
         {
             var result = await repository.Gets(guid);
@@ -74,6 +79,7 @@ namespace Client.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Remove(Guid guid)
         {
             var result = await repository.Deletes(guid);
@@ -85,6 +91,7 @@ namespace Client.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(Category category)
         {
             if (ModelState.IsValid)
@@ -103,6 +110,7 @@ namespace Client.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(Guid Guid)
         {
             var result = await repository.Gets(Guid);

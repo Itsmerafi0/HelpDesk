@@ -8,7 +8,7 @@ namespace Client.Repositories.Data
         private readonly HttpClient httpClient;
         private readonly string request;
 
-        public RoleRepository(string request = "Role/") : base(request)
+        public RoleRepository(string request = "role/") : base(request)
         {
             this.request = request;
             httpClient = new HttpClient

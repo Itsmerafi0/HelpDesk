@@ -13,7 +13,6 @@ namespace API.Contracs
 
         int Register(RegisterVM registerVM);
 
-        GetComplainForUserVM GetAllComplainUser(Guid guid);
 
     }
 }

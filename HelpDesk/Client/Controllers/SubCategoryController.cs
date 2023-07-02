@@ -15,6 +15,7 @@ namespace Client.Controllers
             this.repository = repository;
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             string jwToken = HttpContext.Session.GetString("JWToken") ?? "JWT is null";
@@ -35,6 +36,7 @@ namespace Client.Controllers
 
             return View(subcategories);
         }
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllSub()
         {
             string jwToken = HttpContext.Session.GetString("JWToken") ?? "JWT is null";
@@ -58,6 +60,7 @@ namespace Client.Controllers
 
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Creates()
         {
             return View();

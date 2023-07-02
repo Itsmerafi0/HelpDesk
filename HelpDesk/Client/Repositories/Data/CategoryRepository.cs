@@ -8,7 +8,7 @@ namespace Client.Repositories.Data
         private readonly HttpClient httpClient;
         private readonly string request;
 
-        public CategoryRepository(string request = "Category/") : base(request)
+        public CategoryRepository(string request = "category/") : base(request)
         {
             this.request = request;
             httpClient = new HttpClient

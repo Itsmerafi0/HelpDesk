@@ -1,5 +1,4 @@
-﻿using Client.Utility;
-
+﻿
 namespace Client.Models
 {
     public class Ticket

@@ -12,13 +12,13 @@ namespace API.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 
-public class AccountController : BaseController<Account, AccountVM>
+public class accountController : BaseController<Account, AccountVM>
 {
     private readonly IAccountRepository _accountRepository;
     private readonly IEmployeeRepository _employeeRepository;
     private readonly IMapper<Account, AccountVM> _mapper;
     private readonly ITokenService _tokenService;
-    public AccountController(IAccountRepository accountRepository,
+    public accountController(IAccountRepository accountRepository,
                              IMapper<Account, AccountVM> mapper,
                              IEmployeeRepository employeeRepository,
                              ITokenService tokenRepository) : base(accountRepository, mapper)
@@ -30,7 +30,7 @@ public class AccountController : BaseController<Account, AccountVM>
     }
    
 
-    [HttpPost("Login")]
+    [HttpPost("login")]
     [AllowAnonymous]
     public IActionResult Login(LoginVM loginVM)
     {

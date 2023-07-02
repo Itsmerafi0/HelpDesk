@@ -1,6 +1,7 @@
 ﻿using Client.Models;
 using Client.Repositories.Interface;
 using Client.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Client.Controllers
@@ -14,6 +15,7 @@ namespace Client.Controllers
             this.repository = repository;
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             string jwToken = HttpContext.Session.GetString("JWToken") ?? "JWT is null";
@@ -39,6 +41,7 @@ namespace Client.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(Employee employee)
         {
            
@@ -56,6 +59,7 @@ namespace Client.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(Guid Guid)
         {
             var result = await repository.Gets(Guid);
@@ -81,6 +85,7 @@ namespace Client.Controllers
 
             return View(employee);
         }
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Deletes(Guid guid)
         {
             var result = await repository.Gets(guid);
@@ -106,6 +111,7 @@ namespace Client.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         //   [ValidateAntiForgeryToken]
         public async Task<IActionResult> Remove(Guid guid)
         {
@@ -116,6 +122,7 @@ namespace Client.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Registers(RegisterVM registerVM)
         {
             string jwToken = HttpContext.Session.GetString("JWToken") ?? "JWT is null";

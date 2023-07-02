@@ -1,4 +1,4 @@
-﻿using Client.Utility;
+﻿using Client.Utitlity;
 
 namespace Client.ViewModels
 {

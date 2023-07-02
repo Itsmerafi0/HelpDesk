@@ -12,7 +12,7 @@ namespace Client.Repositories.Data
         private readonly HttpClient httpClient;
         private readonly string request;
 
-        public SubCategoryRepository(string request = "SubCategory/") : base(request)
+        public SubCategoryRepository(string request = "subcategory/") : base(request)
         {
             this.request = request;
             httpClient = new HttpClient
@@ -26,7 +26,7 @@ namespace Client.Repositories.Data
         {
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
             ResponseListVM<SubCategoryDetailVM> entityVM = null;
-            using (var response = httpClient.GetAsync(request + "Detail").Result)
+            using (var response = httpClient.GetAsync(request + "detail").Result)
             {
                 string apiResponse = await response.Content.ReadAsStringAsync();
                 entityVM = JsonConvert.DeserializeObject<ResponseListVM<SubCategoryDetailVM>>(apiResponse);

@@ -9,7 +9,8 @@ namespace API.Contracs
 
 
         IEnumerable<TicketDetailVM> GetAllComplainDetail();
-        IEnumerable<GetTicketForDevVM> GetAllComplainDev();
+        IEnumerable<GetTicketForDevVM> GetAllComplainDev(); 
+        IEnumerable<GetComplainForUserVM> GetAllComplainUser();
         IEnumerable<GetTicketForFinanceVM> GetAllComplainFinance();
         int CreateTicketResolution(TicketResoVM complainresoVM);
 

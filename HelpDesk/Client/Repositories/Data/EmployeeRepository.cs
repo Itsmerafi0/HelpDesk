@@ -13,7 +13,7 @@ namespace Client.Repositories.Data
         private readonly HttpClient httpClient;
         private readonly string request;
 
-        public EmployeeRepository(string request = "Employee/") : base(request)
+        public EmployeeRepository(string request = "employee/") : base(request)
         {
             this.request = request;
             httpClient = new HttpClient
@@ -27,7 +27,7 @@ namespace Client.Repositories.Data
 
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
             StringContent content = new StringContent(JsonConvert.SerializeObject(entity), Encoding.UTF8, "application/json");
-            using (var response = httpClient.PostAsync(request + "Register", content).Result)
+            using (var response = httpClient.PostAsync(request + "register", content).Result)
             {
                 string apiResponse = await response.Content.ReadAsStringAsync();
                 entityVM = JsonConvert.DeserializeObject<ResponseMessageVM>(apiResponse);

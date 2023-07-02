@@ -17,6 +17,7 @@ namespace Client.Controllers
             this.repository = repository;
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             return View();
@@ -31,9 +32,9 @@ namespace Client.Controllers
         [HttpPost]
         [AllowAnonymous]
         /*[ValidateAntiForgeryToken]*/
-        public async Task<IActionResult> Logins(LoginVM login)
+        public async Task<IActionResult> Logins(LoginVM loginS)
         {
-            var result = await repository.Logins(login);
+            var result = await repository.Logins(loginS);
             var token = result.Data;
             var claims = ExtractClaims(token);
             var getRole = "";
@@ -98,35 +99,6 @@ namespace Client.Controllers
         {
             HttpContext.Session.Clear();
             return Redirect("/Account/Logins");
-        }
-
-        [HttpGet]
-        public IActionResult Register()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Register(RegisterVM registerVM)
-        {
-
-            var result = await repository.Register(registerVM);
-            if (result is null)
-            {
-                return RedirectToAction("Error", "Home");
-            }
-            else if (result.Code == 409)
-            {
-                ModelState.AddModelError(string.Empty, result.Message);
-                TempData["Error"] = $"Something Went Wrong! - {result.Message}!";
-                return View();
-            }
-            else if (result.Code == 200)
-            {
-                TempData["Success"] = $"Data has been Successfully Registered! - {result.Message}!";
-                return RedirectToAction("GetAllEmployee", "Employee");
-            }
-            return View();
         }
     }
 }

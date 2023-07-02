@@ -6,11 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers;
 [ApiController]
 [Route("api/[controller]")]
-public class AccountRoleController : BaseController<AccountRole, AccountRoleVM>
+public class accountroleController : BaseController<AccountRole, AccountRoleVM>
 {
     private readonly IAccountRoleRepository _accountroleRepository;
     private readonly IMapper<AccountRole, AccountRoleVM> _mapper;
-    public AccountRoleController(IAccountRoleRepository accountroleRepository,
+    public accountroleController(IAccountRoleRepository accountroleRepository,
         IMapper<AccountRole, AccountRoleVM> mapper) : base(accountroleRepository, mapper)
     {
         _accountroleRepository = accountroleRepository;

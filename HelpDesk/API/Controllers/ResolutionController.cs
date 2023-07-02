@@ -15,13 +15,13 @@ namespace API.Controllers
     [Route("api/[controller]")]
 
 
-    public class ResolutionController : BaseController<Resolution, ResolutionVM>
+    public class resolutionController : BaseController<Resolution, ResolutionVM>
     {
         private readonly IResolutionRepository _resolutionRepository;
         private readonly ITicketRepository _ticketRepository;
         private readonly IMapper<Resolution, ResolutionVM> _mapper;
         private readonly IEmailService _emailService;
-        public ResolutionController(IResolutionRepository resolutionRepository,
+        public resolutionController(IResolutionRepository resolutionRepository,
             IMapper<Resolution, ResolutionVM> mapper, IEmailService emailService, ITicketRepository ticketRepository) : base(resolutionRepository, mapper)
         {
             _resolutionRepository = resolutionRepository;
@@ -30,7 +30,7 @@ namespace API.Controllers
             _emailService = emailService;
         }
 
-        [HttpPost("UpdateStatus")]
+        [HttpPost("updatestatus")]
         [Authorize(Roles = "Admin")]
         public IActionResult UpdateResolutionStatus(Guid complainGuid, StatusLevel newStatus)
         {

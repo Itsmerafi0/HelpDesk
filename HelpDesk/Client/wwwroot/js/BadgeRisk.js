@@ -59,7 +59,7 @@ function loadTicketDetails() {
                 row.data('ticket-guid', ticket.guid);
                 row.data('status', ticket.statusLevel);
 
-                var guidCell = $('<td></td>').text(ticket.guid);
+               /* var guidCell = $('<td></td>').text(ticket.guid);*/
                 var ticketIdCell = $('<td></td>').text(ticket.ticketId);
                 var requesterCell = $('<td></td>').text(ticket.requester);
                 var emailCell = $('<td></td>').text(ticket.email);
@@ -70,7 +70,7 @@ function loadTicketDetails() {
                 var descriptionCell = $('<td></td>').text(ticket.description);
                 var resolutionNoteCell = $('<td></td>').text(ticket.resolutionNote);
 
-                row.append(guidCell, ticketIdCell, requesterCell, emailCell, categoryCell, subcategoryCell, riskLevelCell, statusCell, descriptionCell, resolutionNoteCell);
+                row.append( ticketIdCell, requesterCell, emailCell, categoryCell, subcategoryCell, riskLevelCell, statusCell, descriptionCell, resolutionNoteCell);
                 tbody.append(row);
             }
         },

@@ -9,11 +9,11 @@ namespace API.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 
-public class RoleController : BaseController<Role, RoleVM>
+public class roleController : BaseController<Role, RoleVM>
 {
     private readonly IRoleRepository _roleRepository;
     private readonly IMapper<Role, RoleVM> _mapper;
-    public RoleController(IRoleRepository roleRepository,
+    public roleController(IRoleRepository roleRepository,
         IMapper<Role, RoleVM> mapper) : base(roleRepository, mapper)
     {
         _roleRepository = roleRepository;
