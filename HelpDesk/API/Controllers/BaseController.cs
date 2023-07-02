@@ -25,7 +25,7 @@ namespace API.Controllers
             }
 
         [HttpGet]
-        [Authorize(Roles ="Admin,User")]
+        [Authorize(Roles ="Admin")]
             public IActionResult GetAll()
             {
                 var models = _repository.GetAll();

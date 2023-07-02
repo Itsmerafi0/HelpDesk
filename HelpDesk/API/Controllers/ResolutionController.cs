@@ -14,7 +14,6 @@ namespace API.Controllers
     [ApiController]
     [Route("api/[controller]")]
 
-    [Authorize(Roles = "Admin")]
 
     public class ResolutionController : BaseController<Resolution, ResolutionVM>
     {
@@ -32,6 +31,7 @@ namespace API.Controllers
         }
 
         [HttpPost("UpdateStatus")]
+        [Authorize(Roles = "Admin")]
         public IActionResult UpdateResolutionStatus(Guid complainGuid, StatusLevel newStatus)
         {
             var resolution = _resolutionRepository.GetByGuid(complainGuid);

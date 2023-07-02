@@ -72,10 +72,10 @@ namespace Client.Repositories
             }
             return entityVM;
         }
-        public async Task<ResponseListVM<Entity>> Gets()
+        public async Task<ResponseListVM<Entity>> Gets(string jwToken)
         {
             ResponseListVM<Entity> entityVM = null;
-            //httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", jwToken);
             using (var response = await httpClient.GetAsync(request))
             {
                 string apiResponse = await response.Content.ReadAsStringAsync();

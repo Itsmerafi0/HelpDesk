@@ -1,6 +1,6 @@
 ﻿using API.Utility;
 
-namespace API.ViewModel.Ticket
+namespace API.ViewModel.Employees
 {
     public class GetComplainForUserVM
     {
@@ -12,8 +12,5 @@ namespace API.ViewModel.Ticket
         public string CategoryName { get; set; }
         public string SubCategoryName { get; set; }
         public StatusLevel StatusLevel { get; set; }
-
-        public string? Notes { get; set; } 
-        public DateTime? FinishedDate { get; set; }
     }
 }

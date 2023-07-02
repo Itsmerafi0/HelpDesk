@@ -16,7 +16,8 @@ namespace Client.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var result = await repository.Gets();
+            string jwToken = HttpContext.Session.GetString("JWToken") ?? "JWT is null";
+            var result = await repository.Gets(jwToken);
             var employees = new List<Employee>();
 
             if (result.Data != null)

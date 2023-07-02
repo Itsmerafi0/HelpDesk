@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Client.Controllers
 {
-    [Authorize(Roles = "Admin")]
     public class SubCategoryController : Controller
     {
         private readonly ISubCategoryRepository repository;
@@ -18,7 +17,8 @@ namespace Client.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var result = await repository.Gets();
+            string jwToken = HttpContext.Session.GetString("JWToken") ?? "JWT is null";
+            var result = await repository.Gets(jwToken);
             var subcategories = new List<SubCategory>();
 
             if (result.Data != null)

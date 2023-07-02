@@ -54,8 +54,8 @@ public class TicketController : BaseController<Ticket, TicketVM>
 
     }
     
-    [Authorize(Roles = "Admin")]
     [HttpGet("TicketDetailDeveloper")]
+    [Authorize(Roles = "Admin")]
     public IActionResult GetAllComplainDev()
     {
         try
@@ -81,8 +81,8 @@ public class TicketController : BaseController<Ticket, TicketVM>
             });
         }
     }
-    [Authorize(Roles = "Finance")]
     [HttpGet("TicketDetailFinance")]
+    [Authorize(Roles = "Finance")]
     public IActionResult GetAllComplainFinance()
     {
         try
@@ -109,8 +109,8 @@ public class TicketController : BaseController<Ticket, TicketVM>
         }
     }
 
-    [Authorize]
     [HttpPost("CreateTicket")]
+    [Authorize]
     public IActionResult CreateReso(TicketResoVM complainresoVM)
     {
         var employeeGuid = complainresoVM.EmployeeGuid;
@@ -119,7 +119,7 @@ public class TicketController : BaseController<Ticket, TicketVM>
         switch (results)
         {
             case 0:
-                return NotFound(new ResponseVM<TicketResoVM>
+                return BadRequest(new ResponseVM<TicketResoVM>
                 {
                     Code = StatusCodes.Status400BadRequest,
                     Status = HttpStatusCode.BadRequest.ToString(),

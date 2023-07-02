@@ -2,7 +2,7 @@
 
 namespace API.Models
 {
-    [Table("tb_m_complains")]
+    [Table("tb_m_tickets")]
     public class Ticket : BaseEntity
     {
         [Column("sub_category")]
@@ -15,7 +15,7 @@ namespace API.Models
         public string Description { get; set; }
 
         [Column("attachment")]
-        public byte[] Attachment { get; set; }
+        public byte[]? Attachment { get; set; }
 
         [Column("employee_guid")]
         public Guid EmployeeGuid { get; set; }

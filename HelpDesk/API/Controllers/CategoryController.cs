@@ -9,7 +9,6 @@ namespace API.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 
-[Authorize(Roles ="Admin,User")]
 public class CategoryController : BaseController<Category, CategoryVM>
 {
     private readonly ICategoryRepository _categoryRepository;

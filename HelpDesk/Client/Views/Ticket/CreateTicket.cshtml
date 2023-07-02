@@ -49,52 +49,13 @@
 </div>
 
 <script>
-    let jwToken = "@jwToken";
+    var jwToken = "@jwToken";
 </script>
 
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/Ticket.js" asp-append-version="true"></script>
+
 @section Scripts {
-    <script>
-        function encodeFile(input) {
-            const file = input.files[0];
-            const reader = new FileReader();
-
-            reader.onloadend = function () {
-                const bytes = new Uint8Array(reader.result);
-                const encodedString = btoa(String.fromCharCode.apply(null, bytes));
-                input.previousElementSibling.value = encodedString;
-            }
-
-            if (file) {
-                reader.readAsArrayBuffer(file);
-            }
-        }
-
-        fetch('https://localhost:7024/api/SubCategory/Detail', {
-            method: 'GET',
-            dataType: 'json',
-            headers: {
-                'Authorization': 'Bearer ' + jwToken
-            }
-        })
-            .then(response => response.json())
-            .then(data => {
-                // Get the select element
-                const dropdown = document.getElementById('myDropdown');
-
-                // Loop through the data and create option elements
-                data.data.forEach(subCategory => {
-                    const option = document.createElement('option');
-                    option.value = subCategory.guid; // Set the value to the subCategory guid
-                    option.text = subCategory.name; // Set the text to the subCategory name
-                    dropdown.appendChild(option); // Append the option to the select element
-                });
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-
-
-    </script>
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }

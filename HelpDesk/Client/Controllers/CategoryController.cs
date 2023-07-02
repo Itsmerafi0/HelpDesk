@@ -7,15 +7,19 @@ namespace Client.Controllers
     public class CategoryController : Controller
     {
         private readonly ICategoryRepository repository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public CategoryController(ICategoryRepository repository)
+
+        public CategoryController(ICategoryRepository repository, IHttpContextAccessor httpContextAccessor)
         {
             this.repository = repository;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<IActionResult> Index()
         {
-            var result = await repository.Gets();
+            string jwToken = HttpContext.Session.GetString("JWToken") ?? "JWT is null";
+            var result = await repository.Gets(jwToken);
             var categories = new List<Category>();
 
             if (result.Data != null)

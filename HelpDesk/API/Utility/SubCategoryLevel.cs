@@ -2,7 +2,7 @@
 {
     public enum SubCategoryLevel
     {
-        Login,
-        Parkir
+        Access,
+        Reimbersment
     }
 }

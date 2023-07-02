@@ -20,7 +20,8 @@ namespace Client.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var result = await repository.Gets();
+            string jwToken = HttpContext.Session.GetString("JWToken") ?? "JWT is null";
+            var result = await repository.Gets(jwToken);
             var complains = new List<Ticket>();
 
             if (result.Data != null)
@@ -117,7 +118,6 @@ namespace Client.Controllers
 
             return View();
         }
-        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> GetAllTicketDetails()
         {
             string jwToken = HttpContext.Session.GetString("JWToken") ?? "JWT is null";

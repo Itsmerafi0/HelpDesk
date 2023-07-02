@@ -14,7 +14,6 @@ namespace API.Controllers
     [Route("api/[controller]")]
 
 
-    [Authorize(Roles = "Admin")]
     public class EmployeeController : BaseController<Employee, EmployeeVM>
     {
         private readonly IEmployeeRepository _employeeRepository;
@@ -27,7 +26,7 @@ namespace API.Controllers
         }
 
         [HttpPost("Register")]
-
+        [Authorize(Roles = "Admin")]
         public IActionResult Register(RegisterVM registerVM)
         {
             var result = _employeeRepository.Register(registerVM);
@@ -73,6 +72,7 @@ namespace API.Controllers
         }
 
         [HttpGet("ComplainDetailUser")]
+
         public IActionResult GetAllComplainUser(Guid guid)
         {
             try

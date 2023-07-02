@@ -24,8 +24,8 @@ namespace API.Controllers
             _subCategoryRepository = subCategoryRepository;
             _subCategoryMapper = subCategoryMapper;
         }
-        [Authorize(Roles = "Admin,User")]
         [HttpGet("Detail")]
+        [Authorize]
         public IActionResult GetSubCategoryDetail()
         {
             try

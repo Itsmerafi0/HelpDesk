@@ -5,6 +5,9 @@ namespace API.Contracs
 {
     public interface ITicketRepository : IGeneralRepository<Ticket>
     {
+        bool CheckTicket(string value);
+
+
         IEnumerable<TicketDetailVM> GetAllComplainDetail();
         IEnumerable<GetTicketForDevVM> GetAllComplainDev();
         IEnumerable<GetTicketForFinanceVM> GetAllComplainFinance();

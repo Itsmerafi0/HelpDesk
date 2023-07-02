@@ -15,6 +15,13 @@ namespace API.Repository
         {
             _contextAccessor = contextAccessor;
         }
+
+        public bool CheckTicket(string value)
+        {
+            return _dbContext.Complains.Any(e => e.TicketId == value);
+        }
+
+
         public IEnumerable<TicketDetailVM> GetAllComplainDetail()
         {
             var complains = GetAll();
@@ -118,6 +125,7 @@ namespace API.Repository
             return details;
         }
 
+
         public IEnumerable<GetTicketForFinanceVM> GetAllComplainFinance()
         {
             var complains = GetAll();
@@ -177,11 +185,8 @@ namespace API.Repository
 
             if (subCategory != null)
             {
-                var category = categories.FirstOrDefault(c => c.Guid == subCategory.CategoryGuid);
-
-                if (category != null)
-                {
-                    string prefix = category.CategoryName.Substring(0, 1);
+             
+                    string prefix = subCategory.Name.Substring(0, 1);
 
                     var lastId = (from t in tickets
                                   join s in subcategories on t.SubCategoryGuid equals s.Guid
@@ -201,10 +206,11 @@ namespace API.Repository
 
                     return prefix + "10000";
                 }
-            }
+            
 
             return string.Empty; // Jika tidak ditemukan subCategoryGuid yang valid, kembalikan string kosong.
         }
+
 
         public int CreateTicketResolution(TicketResoVM ticketresolutionVM)
         {
@@ -238,6 +244,41 @@ namespace API.Repository
                 return 0;
             }
         }
+
+
+
+        /*   public int CreateTicketResolution(TicketResoVM ticketresolutionVM)
+           {
+               try
+               {
+                   var ticket = new Ticket
+                   {
+
+                       SubCategoryGuid = ticketresolutionVM.SubCategoryGuid,
+                       TicketId = GenerateID(ticketresolutionVM.SubCategoryGuid),
+                       Description = ticketresolutionVM.Description,
+                       Attachment = ticketresolutionVM.Attachment,
+                       EmployeeGuid = ticketresolutionVM.EmployeeGuid,
+                   };
+                   Create(ticket);
+
+                   var resolution = new Resolution
+                   {
+                       Guid = ticket.Guid,
+                       Status = 0,
+                       Notes = null,
+                       FinishedDate = null
+                   };
+                   _dbContext.Resolutions.Add(resolution);
+                   _dbContext.SaveChanges();
+                   return 1;
+               }
+               catch (Exception e)
+               {
+                   Console.WriteLine(e.StackTrace);
+                   return 0;
+               }
+           }*/
         public string FindEmailByComplainGuid(Guid complainGuid)
         {
             try
