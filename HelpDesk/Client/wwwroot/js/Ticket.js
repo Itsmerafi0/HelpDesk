@@ -15,7 +15,7 @@ function encodeFile(input) {
 
 
 $.ajax({
-    url: 'https://localhost:7024/api/SubCategory/Detail',
+    url: 'https://localhost:7024/api/subcategory/detail',
     headers: {
         'Authorization': 'Bearer ' + jwToken
     },

@@ -136,20 +136,17 @@
                     <div class="col-lg-12 d-flex align-items-strech">
                         <div class="card w-100">
                             <div class="card-body">
-                                <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
-                                    <div class="mb-3 mb-sm-0">
-                                        <h5 class="card-title fw-semibold">Sales Overview</h5>
-                                    </div>
-                                    <div>
-                                        <select class="form-select">
-                                            <option value="1">March 2023</option>
-                                            <option value="2">April 2023</option>
-                                            <option value="3">May 2023</option>
-                                            <option value="4">June 2023</option>
-                                        </select>
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="col-lg-12 d-flex align-items-stretch">
+                                            <div class="card w-100">
+                                                <div class="card-body">
+                                                    <canvas id="myChart"></canvas>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div id="chart"></div>
                             </div>
                         </div>
                     </div>
@@ -202,6 +199,11 @@
                                             </th>
                                             <th class="border-bottom-0">
                                                 <h6 class="fw-semibold mb-0">
+                                                    ResolvedBy
+                                                </h6>
+                                            </th>
+                                            <th class="border-bottom-0">
+                                                <h6 class="fw-semibold mb-0">
                                                     Description
                                                 </h6>
                                             </th>
@@ -210,11 +212,33 @@
                                                     Resolution Note
                                                 </h6>
                                             </th>
+                                            <th class="border-bottom-0">
+                                                <h6 class="fw-semibold mb-0">
+                                                    Finish Date
+                                                </h6>
+                                            </th>
                                        </tr>
                                     </thead>
                             <tbody>
                             </tbody>
                                 </table>
+                                <div id="confirmationModal" class="modal" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Confirm Status Update</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Are you sure you want to update the status?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button id="confirmStatusUpdate" type="button" class="btn btn-primary">Confirm</button>
+                                                <button id="cancelStatusUpdate" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -237,6 +261,11 @@
     <script src="~/js/simplebar.js" asp-append-version="true"></script>
     <script src="~/js/dashboard.js" asp-append-version="true"></script>
     <script src="~/js/BadgeRisk.js" asp-append-version="true"></script>
+    <script src="~/js/Chart.js" asp-append-version="true"></script>
+    <script src="~/js/ticketDetails.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.3.0/chart.min.js" integrity="sha512-mlz/Fs1VtBou2TrUkGzX4VoGvybkD9nkeXWJm3rle0DPHssYYx4j+8kIS15T78ttGfmOjH0lLaBXGcShaVkdkg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 </body>
 </html>
 

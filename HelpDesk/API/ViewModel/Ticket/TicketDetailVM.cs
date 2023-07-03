@@ -12,8 +12,12 @@ namespace API.ViewModel.Ticket
         public string SubCategoryName { get; set; }
         public Risk RiskLevel { get; set; }
         public StatusLevel StatusLevel { get; set; }
+
+        public Guid? ResolvedBy { get; set; }
         public string Description { get; set; }
         public string ResolutionNote { get; set; }
+
+        public DateTime? FinishedDate { get; set; }
 
     }
 }

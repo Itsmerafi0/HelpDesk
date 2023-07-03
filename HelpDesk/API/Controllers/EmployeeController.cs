@@ -70,6 +70,33 @@ namespace API.Controllers
                 Message = "Registration Success"
             });
         }
+        [HttpGet("DeveloperAndFinanceDetails")]
+        public IActionResult GetDeveloperAndFinanceDetails()
+        {
+            try
+            {
+                var results = _employeeRepository.GetDevAndFinanceDetails();
+
+                return Ok(new ResponseVM<List<DevAndFinanceDetailsVM>>
+                {
+                    Code = StatusCodes.Status200OK,
+                    Status = HttpStatusCode.OK.ToString(),
+                    Message = "Get all developer and finance details succeed",
+                    Data = results.ToList()
+                });
+            }
+            catch
+            {
+                return NotFound(new ResponseVM<DevAndFinanceDetailsVM>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Data not found"
+                });
+            }
+        }
+    }
+}
 
 /*        [HttpGet("ComplainDetailUser")]
 
@@ -98,5 +125,4 @@ namespace API.Controllers
             }
 
         }
-*/    }
-}
+*/

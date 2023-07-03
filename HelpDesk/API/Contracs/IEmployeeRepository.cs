@@ -13,6 +13,8 @@ namespace API.Contracs
 
         int Register(RegisterVM registerVM);
 
+        IEnumerable<DevAndFinanceDetailsVM> GetDevAndFinanceDetails();
+
 
     }
 }

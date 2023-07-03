@@ -103,7 +103,8 @@ namespace API.Controllers
             }
 
             [HttpPut]
-            public IActionResult Update(TViewModel viewModel)
+        [Authorize(Roles = "Admin")]
+        public IActionResult Update(TViewModel viewModel)
             {
                 var model = _mapper.Map(viewModel);
                 var isUpdated = _repository.Update(model);

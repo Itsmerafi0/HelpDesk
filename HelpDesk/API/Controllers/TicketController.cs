@@ -55,7 +55,7 @@ public class ticketController : BaseController<Ticket, TicketVM>
     }
     
     [HttpGet("ticketdetaildeveloper")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Developer")]
     public IActionResult GetAllComplainDev()
     {
         try

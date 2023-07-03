@@ -15,5 +15,8 @@ namespace API.Contracs
         int CreateTicketResolution(TicketResoVM complainresoVM);
 
         string FindEmailByComplainGuid(Guid complainGuid);
+
+        string FindIdByTicketGuid(Guid ticketGuid);
+
     }
 }

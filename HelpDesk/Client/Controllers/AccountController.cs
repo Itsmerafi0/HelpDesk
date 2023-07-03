@@ -80,7 +80,7 @@ namespace Client.Controllers
                 }
                 else if (getRole == "User")
                 {
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("User", "Home");
                 }
             }
             return View();

@@ -2,9 +2,10 @@
 {
     public enum StatusLevel
     {
-        Requested,
-        InProgress,
+        Delivered,
+        Accepted,
         Rejected,
+        OnProgress,
         Done
     }
 }

@@ -32,9 +32,10 @@ namespace API.Controllers
 
         [HttpPost("updatestatus")]
         [Authorize(Roles = "Admin")]
-        public IActionResult UpdateResolutionStatus(Guid complainGuid, StatusLevel newStatus)
+        [HttpPost("UpdateStatus")]
+        public IActionResult UpdateResolutionStatus(Guid ticketGuid, StatusLevel newStatus)
         {
-            var resolution = _resolutionRepository.GetByGuid(complainGuid);
+            var resolution = _resolutionRepository.GetByGuid(ticketGuid);
 
             if (resolution == null)
             {
@@ -42,16 +43,16 @@ namespace API.Controllers
                 {
                     Code = 400,
                     Status = "Bad Request",
-                    Message = "Invalid complain guid",
+                    Message = "Invalid ticket guid",
                     Data = null
                 });
             }
             _resolutionRepository.UpdateStatus(resolution, newStatus);
-            SendEmailNotification(complainGuid, newStatus);
+            SendEmailNotification(ticketGuid, newStatus);
 
             var result = new UpdateStatusVM
             {
-                Guid = complainGuid,
+                Guid = ticketGuid,
                 Status = newStatus,
             };
 
@@ -59,16 +60,17 @@ namespace API.Controllers
             {
                 Code = 200,
                 Status = "Success",
-                Message = "Complain status updated successfully.",
+                Message = "Ticket status updated successfully.",
                 Data = result
             });
         }
 
-        private void SendEmailNotification(Guid complainGuid, StatusLevel newStatus)
+        private void SendEmailNotification(Guid ticketGuid, StatusLevel newStatus)
         {
-            string recipient = _ticketRepository.FindEmailByComplainGuid(complainGuid);
+            string recipient = _ticketRepository.FindEmailByComplainGuid(ticketGuid);
+            string ticketId = _ticketRepository.FindIdByTicketGuid(ticketGuid);
             string subject = "Status Update";
-            string htmlMessage = $" The status has been changed to {newStatus}.";
+            string htmlMessage = $"The status of your ticket with ID #{ticketId} has been changed to {newStatus}.";
 
             _emailService.SetEmail(recipient)
                          .SetSubject(subject)

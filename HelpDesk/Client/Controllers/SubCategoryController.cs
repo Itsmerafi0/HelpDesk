@@ -63,6 +63,8 @@ namespace Client.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Creates()
         {
+            string jwToken = HttpContext.Session.GetString("JWToken") ?? "JWT is null";
+            ViewData["JWToken"] = jwToken;
             return View();
         }
 
@@ -73,7 +75,7 @@ namespace Client.Controllers
             var result = await repository.Posts(subCategory);
             if (result.Code == 200)
             {
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(GetAllSub));
             }
             else if (result.Code == 409)
             {
@@ -83,5 +85,78 @@ namespace Client.Controllers
 
             return View();
         }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Deletes(Guid guid)
+        {
+            var result = await repository.Gets(guid);
+            var complain = new SubCategory();
+            if (result.Data?.Guid is null)
+            {
+                return View(complain);
+            }
+            else
+            {
+                complain.Guid = result.Data.Guid;
+                complain.Name = result.Data.Name;
+                complain.CategoryGuid = result.Data.CategoryGuid;
+                complain.RiskLevel = result.Data.RiskLevel;
+            }
+            return View(complain);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Remove(Guid guid)
+        {
+            var result = await repository.Deletes(guid);
+            if (result.Code == 200)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Edit(SubCategory category)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await repository.Puts(category);
+                if (result.Code == 200)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else if (result.Code == 409)
+                {
+                    ModelState.AddModelError(string.Empty, result.Message);
+                    return View();
+                }
+            }
+            return View();
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Edit(Guid Guid)
+        {
+            var result = await repository.Gets(Guid);
+            var category = new SubCategory();
+            if (result.Data?.Guid is null)
+            {
+                return View(category);
+            }
+            else
+            {
+                category.Guid = result.Data.Guid;
+                category.Name = result.Data.Name;
+             
+                category.CreatedDate = result.Data.CreatedDate;
+                category.ModifiedDate = DateTime.Now;
+            }
+
+            return View(category);
+        }
     }
 }
+

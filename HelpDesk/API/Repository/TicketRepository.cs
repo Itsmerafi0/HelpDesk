@@ -46,8 +46,10 @@ namespace API.Repository
                                       s.Name,
                                       s.RiskLevel,
                                       r.Status,
+                                      r.ResolvedBy,
                                       c.Description,
-                                      r.Notes
+                                      r.Notes,
+                                      r.FinishedDate,
                                   };
             var details = new List<TicketDetailVM>();
             foreach (var complainDetail in complainDetails)
@@ -62,8 +64,10 @@ namespace API.Repository
                     SubCategoryName = complainDetail.Name,
                     RiskLevel = complainDetail.RiskLevel,
                     StatusLevel = complainDetail.Status,
+                    ResolvedBy = complainDetail.ResolvedBy,
                     Description = complainDetail.Description,
-                    ResolutionNote = complainDetail.Notes
+                    ResolutionNote = complainDetail.Notes,
+                    FinishedDate = complainDetail.FinishedDate,
                 };
                 details.Add(detail);
             }
@@ -294,6 +298,18 @@ namespace API.Repository
             }
         }
 
+        public string FindIdByTicketGuid(Guid ticketGuid)
+        {
+            try
+            {
+                var ticket = GetByGuid(ticketGuid);
+                return ticket.TicketId;
+            }
+            catch
+            {
+                return null;
+            }
+        }
 
 
         /*   public int CreateTicketResolution(TicketResoVM ticketresolutionVM)

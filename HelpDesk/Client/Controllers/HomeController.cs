@@ -14,7 +14,7 @@ namespace Client.Controllers
             _logger = logger;
         }
 
-        [Authorize(Roles = "User")]
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return View();
@@ -22,6 +22,12 @@ namespace Client.Controllers
 
         [Authorize(Roles = "Admin")]
         public IActionResult Admin()
+        {
+            return View();
+        } 
+
+        [Authorize(Roles = "User")]
+        public IActionResult User()
         {
             return View();
         }

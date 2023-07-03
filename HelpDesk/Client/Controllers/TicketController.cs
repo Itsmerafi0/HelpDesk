@@ -128,7 +128,7 @@ namespace Client.Controllers
 
             return View();
         }
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Developer")]
         public async Task<IActionResult> GetAllTicketDev()
         {
             string jwToken = HttpContext.Session.GetString("JWToken") ?? "JWT is null";
@@ -249,7 +249,7 @@ namespace Client.Controllers
             return View();
         }
         [HttpGet]
-        [Authorize(Roles = "User")]
+        [Authorize]
         public async Task<IActionResult> CreateTicket()
         {
 
@@ -264,7 +264,7 @@ namespace Client.Controllers
         }
         
         [HttpPost]
-        [Authorize(Roles = "User")]
+        [Authorize]
         public async Task<IActionResult> CreateTicket(TicketResoVM ticketResoVM)
         {
             string jwToken = HttpContext.Session.GetString("JWToken") ?? "JWT is null";
@@ -282,7 +282,7 @@ namespace Client.Controllers
             else if (result.Code == 200)
             {
                 TempData["Success"] = $"Data has been Successfully Ticket! - {result.Message}!";
-                return RedirectToAction("GetAllTicketDetails", "Ticket");
+                return RedirectToAction("GetAllTicketUser", "Ticket");
             }
             return View();
         }

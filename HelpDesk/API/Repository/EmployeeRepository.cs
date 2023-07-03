@@ -108,24 +108,57 @@ namespace API.Repository
             return "100000";
         }
 
-/*        public GetComplainForUserVM GetAllComplainUser(Guid guid)
+        public IEnumerable<DevAndFinanceDetailsVM> GetDevAndFinanceDetails()
         {
-            var employee = GetByGuid(guid);
-            var complain = _dbContext.Complains.FirstOrDefault(e => e.EmployeeGuid == guid);
-            var subCategory = _dbContext.SubCategories.FirstOrDefault(sb => sb.Guid == complain.SubCategoryGuid);
-            var category = _dbContext.Categories.FirstOrDefault(c => c.Guid == subCategory.CategoryGuid);
-            *//*     var resolution = _dbContext.Resolutions.FirstOrDefault(r => r.Guid ==complain.Guid);*//*
+            var employees = GetAll();
+            var accounts = _dbContext.Accounts.ToList();
+            var accountRoles = _dbContext.AccountRoles.ToList();
+            var roles = _dbContext.Roles.ToList();
+            var results = from e in employees
+                          join a in accounts on e.Guid equals a.Guid
+                          join ar in accountRoles on a.Guid equals ar.AccountGuid
+                          join rl in roles on ar.RoleGuid equals rl.Guid
+                          where rl.Name == "Developer" || rl.Name == "Finance"
+                          select new
+                          {
+                              e.Guid,
+                              rl.Name,
+                              FullName = e.FirstName + " " + e.LastName,
+                          };
 
-            var data = new GetComplainForUserVM
+            var details = new List<DevAndFinanceDetailsVM>();
+            foreach (var result in results)
             {
-                Guid = employee.Guid,
-                Description = complain.Description,
-                Attachment = complain.Attachment,
-                CategoryName = category.CategoryName,
-                SubCategoryName = subCategory.Name,
-                *//*StatusLevel = resolution.Status*//*
-            };
-            return data;
+                var detail = new DevAndFinanceDetailsVM
+                {
+                    EmployeeGuid = result.Guid,
+                    RoleName = result.Name,
+                    FullName = result.FullName
+                };
+                details.Add(detail);
+            }
+            return details;
         }
-*/    }
+
+        /*        public GetComplainForUserVM GetAllComplainUser(Guid guid)
+                {
+                    var employee = GetByGuid(guid);
+                    var complain = _dbContext.Complains.FirstOrDefault(e => e.EmployeeGuid == guid);
+                    var subCategory = _dbContext.SubCategories.FirstOrDefault(sb => sb.Guid == complain.SubCategoryGuid);
+                    var category = _dbContext.Categories.FirstOrDefault(c => c.Guid == subCategory.CategoryGuid);
+                    *//*     var resolution = _dbContext.Resolutions.FirstOrDefault(r => r.Guid ==complain.Guid);*//*
+
+                    var data = new GetComplainForUserVM
+                    {
+                        Guid = employee.Guid,
+                        Description = complain.Description,
+                        Attachment = complain.Attachment,
+                        CategoryName = category.CategoryName,
+                        SubCategoryName = subCategory.Name,
+                        *//*StatusLevel = resolution.Status*//*
+                    };
+                    return data;
+                }
+        */
+    }
 }
