@@ -8,7 +8,6 @@ $.ajax({
     success: function (dataFromAPI) {
         // Extracting data for the chart
         const riskLevels = dataFromAPI.data.map(item => item.riskLevel);
-        const statusLevels = dataFromAPI.data.map(item => item.statusLevel);
 
         // Create a chart using Chart.js
         const ctx = document.getElementById('myChart').getContext('2d');
@@ -23,12 +22,7 @@ $.ajax({
                         backgroundColor: 'rgba(255, 99, 132, 0.7)',
                         borderWidth: 1
                     },
-                    {
-                        label: 'Status Level',
-                        data: statusLevels,
-                        backgroundColor: 'rgba(54, 162, 235, 0.7)',
-                        borderWidth: 1
-                    }
+        
                 ]
             },
             options: {
@@ -49,7 +43,7 @@ $.ajax({
                 plugins: {
                     title: {
                         display: true,
-                        text: 'Risk Level and Status Level'
+                        text: 'Risk Level'
                     },
                     legend: {
                         position: 'top'

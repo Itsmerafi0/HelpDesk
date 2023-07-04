@@ -58,7 +58,6 @@ function loadTicketDetails() {
                 row.data('ticket-guid', ticket.guid);
                 row.data('status', ticket.statusLevel);
 
-                var guidCell = $('<td></td>').text(ticket.guid);
                 var ticketIdCell = $('<td></td>').text(ticket.ticketId);
                 var requesterCell = $('<td></td>').text(ticket.requester);
                 var emailCell = $('<td></td>').text(ticket.email);
@@ -66,8 +65,8 @@ function loadTicketDetails() {
                 var subcategoryCell = $('<td></td>').text(ticket.subCategoryName);
                 var riskLevelCell = $('<td></td>').html(getRiskLevelLabel(ticket.riskLevel));
                 var statusCell = $('<td class="status-cell"></td>').text(getStatusLabel(ticket.statusLevel));
-                var descriptionCell = $('<td></td>').text(ticket.description);
                 var resolvedByCell = $('<td></td>').text(ticket.resolvedBy);
+                var descriptionCell = $('<td></td>').text(ticket.description);
                 var resolutionNoteCell = $('<td></td>').text(ticket.resolutionNote);
 
                 var dropdown = $('<select class="status-dropdown"></select>');
@@ -81,7 +80,7 @@ function loadTicketDetails() {
                 statusCell.html(dropdown);
 
 
-                row.append(guidCell, ticketIdCell, requesterCell, emailCell, categoryCell, subcategoryCell, riskLevelCell, statusCell,  descriptionCell, resolvedByCell , resolutionNoteCell);
+                row.append(ticketIdCell, requesterCell, emailCell, categoryCell, subcategoryCell, riskLevelCell, statusCell, resolvedByCell , descriptionCell , resolutionNoteCell);
                 tbody.append(row);
             }
         },
@@ -135,8 +134,8 @@ function updateComplaintStatus(ticketGuid, newStatus) {
         },
         contentType: 'application/json',
         data: JSON.stringify({
-            ticketGuid: ticketGuid,
-            newStatus: newStatus
+            guid: ticketGuid,
+            status: newStatus
         }),
         dataType: 'json'
     });

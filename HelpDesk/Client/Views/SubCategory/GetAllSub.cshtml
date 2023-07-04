@@ -59,6 +59,14 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
+                            <a class="sidebar-link" href="/Employee/Index" aria-expanded="false">
+                                <span>
+                                    <i class="ti ti-article"></i>
+                                </span>
+                                <span class="hide-menu">Employee</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
                             <a class="sidebar-link" href="/SubCategory/GetAllSub" aria-expanded="false">
                                 <span>
                                     <i class="ti ti-alert-circle"></i>
@@ -117,9 +125,7 @@
                                     <img src="/image/user-1.jpg" alt="" width="35" height="35" class="rounded-circle">
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
-                                    <div class="message-body">
-                                        <a href="/Ticket/GetAllTicketUser" class="btn btn-outline-primary mx-3 mt-2 d-block">Ticket</a>
-                                    </div>
+                                 
                                     <div class="message-body">
                                         <a href="/Logout" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
                                     </div>
@@ -185,6 +191,9 @@
                                                         @Html.DisplayNameFor(model => model.RiskLevel)
                                                     </h6>
                                                 </th>
+                                                <th>
+                                                </th>
+                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -204,6 +213,13 @@
                                                         <h6 class="fw-semibold mb-0 fs-4">
                                                             @Html.DisplayFor(modelItem => item.RiskLevel)
                                                         </h6>
+                                                    </td>
+                                                    <td>
+                                                        @Html.ActionLink("Edit", "Edit", new { item.Guid}) 
+                                                    </td>
+                                                    <td>
+                                                        @Html.ActionLink("Delete", "Deletes", new { item.Guid })
+
                                                     </td>
                                                 </tr>
                                             }

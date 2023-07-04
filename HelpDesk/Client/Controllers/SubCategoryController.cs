@@ -112,7 +112,7 @@ namespace Client.Controllers
             var result = await repository.Deletes(guid);
             if (result.Code == 200)
             {
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(GetAllSub));
             }
             return View();
         }
@@ -121,12 +121,13 @@ namespace Client.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(SubCategory category)
         {
+            
             if (ModelState.IsValid)
             {
                 var result = await repository.Puts(category);
                 if (result.Code == 200)
                 {
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(GetAllSub));
                 }
                 else if (result.Code == 409)
                 {
@@ -140,6 +141,8 @@ namespace Client.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(Guid Guid)
         {
+            string jwToken = HttpContext.Session.GetString("JWToken") ?? "JWT is null";
+            ViewData["JWToken"] = jwToken;
             var result = await repository.Gets(Guid);
             var category = new SubCategory();
             if (result.Data?.Guid is null)

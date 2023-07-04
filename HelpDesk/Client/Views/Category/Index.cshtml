@@ -60,6 +60,14 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
+                            <a class="sidebar-link" href="/Employee/Index" aria-expanded="false">
+                                <span>
+                                    <i class="ti ti-article"></i>
+                                </span>
+                                <span class="hide-menu">Employee</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
                             <a class="sidebar-link" href="/SubCategory/GetAllSub" aria-expanded="false">
                                 <span>
                                     <i class="ti ti-alert-circle"></i>
@@ -118,9 +126,7 @@
                                     <img src="/image/user-1.jpg" alt="" width="35" height="35" class="rounded-circle">
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
-                                    <div class="message-body">
-                                        <a href="/Ticket/GetAllTicketUser" class="btn btn-outline-primary mx-3 mt-2 d-block">Ticket</a>
-                                    </div>
+                                   
                                     <div class="message-body">
                                         <a href="/Logout" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
                                     </div>
@@ -193,43 +199,14 @@
                                                         <h6 class="fw-semibold mb-1">@Html.DisplayFor(modelItem => item.CategoryName)</h6>
                                                     </td>
                                                     <td>
-                                                        <button id="categoryModalBtn_@item.Guid" type="button" class="btn bg-info-light" data-toggle="modal" data-target="#categoryModal_@item.Guid">Edit</button>
+                                                        @Html.ActionLink("Edit", "Edit", new { item.Guid })
                                                     </td>
                                                     <td>
-                                                        @Html.ActionLink("Delete", "Deletes", new { id = item.Guid })
+                                                        @Html.ActionLink("Delete", "Deletes", new { item.Guid })
                                                     </td>
                                                 </tr>
                                             }
 
-                                            @foreach (var item in Model)
-                                            {
-                                                <div class="modal fade" id="categoryModal_@item.Guid" tabindex="-1" role="dialog" aria-labelledby="categoryModalLabel_@item.Guid" aria-hidden="true">
-                                                    <div class="modal-dialog" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" id="categoryModalLabel_@item.Guid">Category</h5>
-                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                    <span aria-hidden="true">&times;</span>
-                                                                </button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <form asp-action="Edit" method="post">
-                                                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                                                                    <input type="hidden" name="guid" value="@item.Guid" />
-                                                                    <input name="category" value="@item.CategoryName" />
-
-                                                                    <div class="modal-footer">
-                                                                        <input type="submit" value="Save" class="btn btn-primary" />
-                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            }
-
-                                            }
 
                                         </tbody>
                                     </table>
@@ -250,41 +227,6 @@
     <script src="~/js/apexcharts.min.js" asp-append-version="true"></script>
     <script src="~/js/simplebar.js" asp-append-version="true"></script>
     <script src="~/js/dashboard.js" asp-append-version="true"></script>
-    <script>
-        // JavaScript function to open the modal
-        function openModal(modalId) {
-            var modal = document.getElementById(modalId);
-            if (modal) {
-                $(modal).modal('show'); // Using jQuery to show the modal
-            }
-        }
-
-        // Attach the click event to the button and call the openModal function
-        $(document).ready(function () {
-            var buttons = document.getElementsByClassName('btn bg-info-light');
-            for (var i = 0; i < buttons.length; i++) {
-                var button = buttons[i];
-                button.onclick = function () {
-                    var modalId = this.id.replace('categoryModalBtn_', 'categoryModal_');
-                    openModal(modalId);
-                };
-            }
-        });
-
-        $('.modal form').submit(function (event) {
-            event.preventDefault(); // Prevent form submission
-
-            var modalId = $(this).closest('.modal').attr('id');
-            var ratingId = modalId.replace('categoryModal_', '');
-         
-            // Get the comment value
-            var comment = $('#category' + ratingId).val();
-
-            // Submit the form
-            $(this).off('submit').submit();
-        });
-         
-    </script>
-
+   
 </body>
 </html>

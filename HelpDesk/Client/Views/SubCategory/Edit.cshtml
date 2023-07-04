@@ -1,21 +1,23 @@
 ﻿@model Client.Models.SubCategory
 
 @{
-    ViewData["Title"] = "Creates";
-    Layout = null;
+    ViewData["Title"] = "Edit";
     var jwToken = ViewData["JWToken"];
+    Layout = null;
+
+
 }
 
 <link rel="stylesheet" href="~/css/data.css" asp-append-version="true" />
 
 <div class="container">
     <div class="text">
-        Create SubCategory
+    Edit SubCategory
     </div>
-    <form asp-action="Creates">
+    <form action="Edit" method="post">
         <div class="form-row">
             <div class="input-data" hidden>
-                <input asp-for="Guid" value="0" type="text" required>
+                <input asp-for="Guid" type="text" required>
                 <div class="underline"></div>
                 <label for="">First Name</label>
             </div>
@@ -41,11 +43,11 @@
         </div>
         <div class="form-row">
             <div class="input-data textarea">
-
+              
                 <div class="form-row submit-btn">
                     <div class="input-data">
                         <div class="inner"></div>
-                        <input type="submit" value="Create">
+                        <input type="submit" value="Save">
                     </div>
                 </div>
             </div>
@@ -61,8 +63,3 @@
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/js/SubCategory.js" asp-append-version="true"></script>
-
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

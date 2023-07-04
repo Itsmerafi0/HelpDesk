@@ -32,7 +32,6 @@ namespace API.Controllers
 
         [HttpPost("updatestatus")]
         [Authorize(Roles = "Admin")]
-        [HttpPost("UpdateStatus")]
         public IActionResult UpdateResolutionStatus(Guid ticketGuid, StatusLevel newStatus)
         {
             var resolution = _resolutionRepository.GetByGuid(ticketGuid);
