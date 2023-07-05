@@ -32,6 +32,8 @@ namespace Client.Controllers
         [Authorize(Roles = "User")]
         public IActionResult User()
         {
+            string jwToken = HttpContext.Session.GetString("JWToken") ?? "JWT is null";
+            ViewData["JWToken"] = jwToken;
             return View();
         }
 

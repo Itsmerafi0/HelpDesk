@@ -83,7 +83,7 @@ public class ticketController : BaseController<Ticket, TicketVM>
     } 
     
     [HttpGet("ticketdetailuser")]
-    [Authorize(Roles ="User")]
+    [Authorize(Roles = "User")]
     public IActionResult GetAllComplainUser()
     {
         try

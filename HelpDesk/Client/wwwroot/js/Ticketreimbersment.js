@@ -24,15 +24,19 @@ $.ajax({
     success: function (data) {
         console.log(data);
         const dropdown = document.getElementById('myDropdown');
+        const categoryName = 'Reimbursement'; // Ganti dengan nama kategori yang diinginkan (misalnya 'access' atau 'reimbursement')
         data.data.forEach(subCategory => {
-            const option = document.createElement('option');
-            option.value = subCategory.guid;
-            option.text = subCategory.name;
-            dropdown.appendChild(option);
+            if (subCategory.categoryName === categoryName) {
+                const option = document.createElement('option');
+                option.value = subCategory.guid;
+                option.text = subCategory.name;
+                dropdown.appendChild(option);
+            }
         });
     },
     error: function (error) {
         console.error('Error:', error);
     }
 });
+
 

@@ -155,11 +155,13 @@ namespace API.Repository
                                       c.Guid,
                                       c.TicketId,
                                       Requester = e.FirstName + " " + e.LastName,
+                                      e.Email,
                                       c.Description,
                                       c.Attachment,
-                                      t.CategoryName,
                                       s.Name,
-                                      r.Status
+                                      s.RiskLevel,
+                                      r.Status,
+                                      r.FinishedDate,
                                   };
 
             var details = new List<GetComplainForUserVM>();
@@ -170,11 +172,13 @@ namespace API.Repository
                     Guid = complainDetail.Guid,
                     TicketId = complainDetail.TicketId,
                     Requester = complainDetail.Requester,
+                    Email = complainDetail.Email,
                     Description = complainDetail.Description,
                     Attachment = complainDetail.Attachment,
-                    CategoryName = complainDetail.CategoryName,
                     SubCategoryName = complainDetail.Name,
-                    StatusLevel = complainDetail.Status
+                    RiskLevel = complainDetail.RiskLevel,
+                    StatusLevel = complainDetail.Status,
+                    FinishedDate = complainDetail.FinishedDate,
                 };
                 details.Add(detail);
             }
