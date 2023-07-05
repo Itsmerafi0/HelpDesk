@@ -91,7 +91,7 @@ namespace API.Repository
                                   join r in resolutions on c.Guid equals r.Guid
                                   join s in subcategories on c.SubCategoryGuid equals s.Guid
                                   join t in categories on s.CategoryGuid equals t.Guid
-                                  where t.CategoryName == "Access"
+                                  where t.CategoryName == "Access" && r.Status == Utility.StatusLevel.InProgress
                                   select new
                                   {
                                       c.Guid,
@@ -146,7 +146,7 @@ namespace API.Repository
                                   join r in resolutions on c.Guid equals r.Guid
                                   join s in subcategories on c.SubCategoryGuid equals s.Guid
                                   join t in categories on s.CategoryGuid equals t.Guid
-                                  where e.Guid == employeeGuid
+                                  where e.Guid == employeeGuid 
                                   select new
                                   {
                                       c.Guid,
@@ -193,7 +193,7 @@ namespace API.Repository
                                   join r in resolutions on c.Guid equals r.Guid
                                   join s in subcategories on c.SubCategoryGuid equals s.Guid
                                   join t in categories on s.CategoryGuid equals t.Guid
-                                  where t.CategoryName == "Reimbursement"
+                                  where t.CategoryName == "Reimbursement" && r.Status == Utility.StatusLevel.InProgress
                                   select new
                                   {
                                       c.Guid,

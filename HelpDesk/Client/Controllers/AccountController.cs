@@ -35,23 +35,7 @@ namespace Client.Controllers
         public async Task<IActionResult> Logins(LoginVM loginS)
         {
             var result = await repository.Logins(loginS);
-            var token = result.Data;
-            var claims = ExtractClaims(token);
-            var getRole = "";
-            /*Console.WriteLine(claims);
-*/
-            foreach (var claim in claims)
-            {
-                if (claim.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role")
-                {
-                    getRole = claim.Value;
-                    /* Console.WriteLine($"Claim Type: {claim.Type} - Claim Value: {claim.Value}");
-                     HttpContext.Session.SetString("Role", claim.Value);*/
-                }
 
-            }
-            /*            Console.WriteLine(getRole);
-            */
             if (result is null)
             {
                 return RedirectToAction("Error", "Home");
@@ -61,11 +45,27 @@ namespace Client.Controllers
                 ModelState.AddModelError(string.Empty, result.Message);
                 return View();
             }
-            if (result.Code == 200)
+            else if (result.Code == 401) // Invalid email or password
             {
-                HttpContext.Session.SetString("JWToken", result.Data);
-                /*return RedirectToAction("LandingPage", "Home");*/
-                /*var role = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Role);*/
+                ModelState.AddModelError(string.Empty, "Invalid email or password");
+                return View();
+            }
+            else if (result.Code == 200)
+            {
+                var token = result.Data;
+                var claims = ExtractClaims(token);
+                var getRole = "";
+
+                foreach (var claim in claims)
+                {
+                    if (claim.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role")
+                    {
+                        getRole = claim.Value;
+                    }
+                }
+
+                HttpContext.Session.SetString("JWToken", token);
+
                 if (getRole == "Admin")
                 {
                     return RedirectToAction("Admin", "Home");
@@ -83,6 +83,7 @@ namespace Client.Controllers
                     return RedirectToAction("User", "Home");
                 }
             }
+
             return View();
         }
 

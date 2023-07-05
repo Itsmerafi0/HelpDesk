@@ -23,8 +23,11 @@ namespace Client.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Admin()
         {
+            string jwToken = HttpContext.Session.GetString("JWToken") ?? "JWT is null";
+            ViewData["JWToken"] = jwToken;
+
             return View();
-        } 
+        }
 
         [Authorize(Roles = "User")]
         public IActionResult User()
@@ -35,11 +38,17 @@ namespace Client.Controllers
         [Authorize(Roles = "Developer")]
         public IActionResult Developer()
         {
+            string jwToken = HttpContext.Session.GetString("JWToken") ?? "JWT is null";
+            ViewData["JWToken"] = jwToken;
+
             return View();
         }
         [Authorize(Roles = "Finance")]
         public IActionResult Finance()
         {
+            string jwToken = HttpContext.Session.GetString("JWToken") ?? "JWT is null";
+            ViewData["JWToken"] = jwToken;
+
             return View();
         }
 

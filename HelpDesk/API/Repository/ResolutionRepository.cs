@@ -15,6 +15,29 @@ namespace API.Repository
         {
             resolution.Status = newStatus;
 
+            if (resolution.Status == StatusLevel.Done)
+            {
+
+                resolution.FinishedDate = DateTime.Now;
+            }
+
+            _dbContext.Update(resolution);
+            _dbContext.SaveChanges();
+
+        }
+
+        public void UpdateResolvedBy(Resolution resolution, Guid resolvedBy)
+        {
+            resolution.ResolvedBy = resolvedBy;
+
+            _dbContext.Update(resolution);
+            _dbContext.SaveChanges();
+        }
+
+        public void UpdateResolutionNote(Resolution resolution, string note)
+        {
+            resolution.Notes = note;
+
             _dbContext.Update(resolution);
             _dbContext.SaveChanges();
         }

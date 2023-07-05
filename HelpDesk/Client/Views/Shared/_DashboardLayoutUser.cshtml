@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] User</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/styles.min.css" asp-append-version="true" /> 
-    <link rel="stylesheet" href="~/css/User.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/styles.min.css" asp-append-version="true" />
 
 </head>
 <body>
@@ -31,6 +30,18 @@
                     <ul id="sidebarnav">
                         <li class="nav-small-cap">
                             <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                            <span class="hide-menu">Home</span>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="/Home/User" aria-expanded="false">
+                                <span>
+                                    <i class="ti ti-layout-dashboard"></i>
+                                </span>
+                                <span class="hide-menu">Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="nav-small-cap">
+                            <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
                             <span class="hide-menu">MENU</span>
                         </li>
                         <li class="sidebar-item">
@@ -46,7 +57,7 @@
                                 <span>
                                     <i class="ti ti-cards"></i>
                                 </span>
-                                <span class="hide-menu">Detail Ticket</span>
+                                <span class="hide-menu">Ticket</span>
                             </a>
                         </li>
                         <li class="nav-small-cap">
@@ -60,7 +71,8 @@
                                 </span>
                                 <span class="hide-menu">Logout</span>
                             </a>
-                        </li>                        
+                        </li>
+
                     </ul>
                 </nav>
                 <!-- End Sidebar navigation -->
@@ -78,8 +90,8 @@
                     </ul>
                     <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
                         <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
-                            
-                                @User.Identity.Name
+
+                            @User.Identity.Name
                             <li class="nav-item dropdown">
                                 <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
                                    aria-expanded="false">
@@ -97,16 +109,14 @@
             </header>
             <!--  Header End -->
             <div class="container-fluid">
-                
-
             </div>
-                
-                <footer class="py-6 px-6 text-center">
-                    <p>
-                        Created with <i class="fa fa-heart"></i> by Kelompok 4
-                        - Final Project Metrodata Coding Camp Batch 78
-                    </p>
-                </footer>
+
+            <footer class="py-6 px-6 text-center">
+                <p>
+                    Created with <i class="fa fa-heart"></i> by Kelompok 4
+                    - Final Project Metrodata Coding Camp Batch 78
+                </p>
+            </footer>
         </div>
     </div>
 

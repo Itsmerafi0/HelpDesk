@@ -34,7 +34,7 @@ p {
     text-transform: uppercase;
     transition: transform 80ms ease-in;
 }
+
 .image-container {
     min-height: 100vh;
 }
-

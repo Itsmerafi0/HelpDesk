@@ -5,7 +5,7 @@
         Delivered,
         Accepted,
         Rejected,
-        OnProgress,
+        InProgress,
         Done
     }
 }

@@ -13,8 +13,6 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-
-
     public class resolutionController : BaseController<Resolution, ResolutionVM>
     {
         private readonly IResolutionRepository _resolutionRepository;
@@ -30,11 +28,10 @@ namespace API.Controllers
             _emailService = emailService;
         }
 
-        [HttpPost("updatestatus")]
-        [Authorize(Roles = "Admin")]
-        public IActionResult UpdateResolutionStatus(Guid ticketGuid, StatusLevel newStatus)
+        [HttpPut("updatestatus")]
+        public IActionResult UpdateResolutionStatus(Guid resolutionGuid, StatusLevel newStatus)
         {
-            var resolution = _resolutionRepository.GetByGuid(ticketGuid);
+            var resolution = _resolutionRepository.GetByGuid(resolutionGuid);
 
             if (resolution == null)
             {
@@ -42,24 +39,24 @@ namespace API.Controllers
                 {
                     Code = 400,
                     Status = "Bad Request",
-                    Message = "Invalid ticket guid",
+                    Message = "Invalid resolution guid",
                     Data = null
                 });
             }
             _resolutionRepository.UpdateStatus(resolution, newStatus);
-            SendEmailNotification(ticketGuid, newStatus);
+            SendEmailNotification(resolutionGuid, newStatus);
 
             var result = new UpdateStatusVM
             {
-                Guid = ticketGuid,
-                Status = newStatus,
+                ResolutionGuid = resolutionGuid,
+                NewStatus = newStatus,
             };
 
             return Ok(new ResponseVM<UpdateStatusVM>
             {
                 Code = 200,
                 Status = "Success",
-                Message = "Ticket status updated successfully.",
+                Message = "Resolution status updated successfully.",
                 Data = result
             });
         }
@@ -75,6 +72,71 @@ namespace API.Controllers
                          .SetSubject(subject)
                          .SetHtmlMessage(htmlMessage)
                          .SendEmailAsync();
+        }
+
+        [HttpPut("updateresolvedBy")]
+        public IActionResult UpdateResolvedBy(Guid resolutionGuid, Guid resolvedBy)
+        {
+            var resolution = _resolutionRepository.GetByGuid(resolutionGuid);
+
+            if (resolution == null)
+            {
+                return BadRequest(new ResponseVM<UpdateResolvedByVM>
+                {
+                    Code = 400,
+                    Status = "Bad Request",
+                    Message = "Invalid resolution guid",
+                    Data = null
+                });
+            }
+            _resolutionRepository.UpdateResolvedBy(resolution, resolvedBy);
+
+            var result = new UpdateResolvedByVM
+            {
+                ResolutionGuid = resolutionGuid,
+                ResolvedBy = resolvedBy
+            };
+
+            return Ok(new ResponseVM<UpdateResolvedByVM>
+            {
+                Code = 200,
+                Status = "Success",
+                Message = "ResolvedBy updated successfully.",
+                Data = result
+            });
+        }
+
+        [HttpPut("updateresolutionnotes")]
+        public IActionResult UpdateResolutionNotes(Guid resolutionGuid, string notes)
+        {
+            var resolution = _resolutionRepository.GetByGuid(resolutionGuid);
+
+            if (resolution == null)
+            {
+                return BadRequest(new ResponseVM<UpdateResolutionNoteVM>
+                {
+                    Code = 400,
+                    Status = "Bad Request",
+                    Message = "Invalid resolution guid",
+                    Data = null
+                });
+            }
+
+            _resolutionRepository.UpdateResolutionNote(resolution, notes);
+
+            var result = new UpdateResolutionNoteVM
+            {
+                ResolutionGuid = resolutionGuid,
+                Notes = notes
+            };
+
+            return Ok(new ResponseVM<UpdateResolutionNoteVM>
+            {
+                Code = 200,
+                Status = "Success",
+                Message = "Resolution note updated successfully.",
+                Data = result
+            });
         }
 
     }

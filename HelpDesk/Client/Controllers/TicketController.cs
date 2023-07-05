@@ -132,6 +132,7 @@ namespace Client.Controllers
         public async Task<IActionResult> GetAllTicketDev()
         {
             string jwToken = HttpContext.Session.GetString("JWToken") ?? "JWT is null";
+            ViewData["JWToken"] = jwToken;
 
             var complainResult = await repository.GetAllTicketDev(jwToken);
             var complains = new List<GetTicketForDevVM>();
@@ -189,6 +190,8 @@ namespace Client.Controllers
         public async Task<IActionResult> GetAllTicketFinance()
         {
             string jwToken = HttpContext.Session.GetString("JWToken") ?? "JWT is null";
+            ViewData["JWToken"] = jwToken;
+
 
             var complainResult = await repository.GetAllTicketFinance(jwToken);
             var complains = new List<GetTicketForFinance>();
