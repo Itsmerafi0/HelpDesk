@@ -6,6 +6,7 @@
     <title>@ViewData["Title"] User</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/styles.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 
 </head>
 <body>
@@ -86,7 +87,6 @@
             <header class="app-header">
                 <nav class="navbar navbar-expand-lg navbar-light">
                     <ul class="navbar-nav">
-                        @RenderBody()
                     </ul>
                     <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
                         <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
@@ -108,8 +108,7 @@
                 </nav>
             </header>
             <!--  Header End -->
-            <div class="container-fluid">
-            </div>
+            @RenderBody()
 
             <footer class="py-6 px-6 text-center">
                 <p>

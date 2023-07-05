@@ -6,6 +6,7 @@ namespace API.Utility
 {
     public class EmailService : IEmailService
     {
+
         private readonly string smtpServer;
         private readonly int smtpPort;
         private readonly string fromEmailAddress;
@@ -56,4 +57,3 @@ namespace API.Utility
         }
     }
 }
-

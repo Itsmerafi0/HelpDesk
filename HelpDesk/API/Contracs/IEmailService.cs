@@ -8,6 +8,5 @@ namespace API.Contracs
         EmailService SetEmail(string email);
         EmailService SetSubject(string subject);
         EmailService SetHtmlMessage(string htmlMessage);
-
     }
 }

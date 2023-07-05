@@ -1,6 +1,7 @@
 ﻿using API.Contexts;
 using API.Contracs;
 using API.Models;
+using API.Utility;
 using API.ViewModel.Ticket;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Sockets;
@@ -48,6 +49,7 @@ namespace API.Repository
                                       r.Status,
                                       r.ResolvedBy,
                                       c.Description,
+                                      c.Attachment,
                                       r.Notes,
                                       r.FinishedDate,
                                   };
@@ -66,6 +68,7 @@ namespace API.Repository
                     StatusLevel = complainDetail.Status,
                     ResolvedBy = complainDetail.ResolvedBy,
                     Description = complainDetail.Description,
+                    Attachment = complainDetail.Attachment,
                     ResolutionNote = complainDetail.Notes,
                     FinishedDate = complainDetail.FinishedDate,
                 };
@@ -91,7 +94,7 @@ namespace API.Repository
                                   join r in resolutions on c.Guid equals r.Guid
                                   join s in subcategories on c.SubCategoryGuid equals s.Guid
                                   join t in categories on s.CategoryGuid equals t.Guid
-                                  where t.CategoryName == "Access" && r.Status == Utility.StatusLevel.InProgress
+                                  where t.CategoryName == "Access" && (r.Status == StatusLevel.Done || r.Status == StatusLevel.InProgress)
                                   select new
                                   {
                                       c.Guid,
@@ -122,7 +125,7 @@ namespace API.Repository
                     StatusLevel = complainDetail.Status,
                     Description = complainDetail.Description,
                     ResolutionNote = complainDetail.Notes,
-                    FinishDate = complainDetail.FinishedDate
+                    FinishedDate = complainDetail.FinishedDate
                 };
                 details.Add(detail);
             }
@@ -193,7 +196,7 @@ namespace API.Repository
                                   join r in resolutions on c.Guid equals r.Guid
                                   join s in subcategories on c.SubCategoryGuid equals s.Guid
                                   join t in categories on s.CategoryGuid equals t.Guid
-                                  where t.CategoryName == "Reimbursement" && r.Status == Utility.StatusLevel.InProgress
+                                  where t.CategoryName == "Reimbursement" && (r.Status == StatusLevel.Done || r.Status == StatusLevel.InProgress)
                                   select new
                                   {
                                       c.Guid,
@@ -205,7 +208,8 @@ namespace API.Repository
                                       r.Status,
                                       c.Attachment,
                                       c.Description,
-                                      r.Notes
+                                      r.Notes,
+                                      r.FinishedDate
                                   };
             var details = new List<GetTicketForFinanceVM>();
             foreach (var complainDetail in complainDetails)
@@ -221,7 +225,9 @@ namespace API.Repository
                     RiskLevel = complainDetail.RiskLevel,
                     StatusLevel = complainDetail.Status,
                     Description = complainDetail.Description,
-                    ResolutionNote = complainDetail.Notes
+                    ResolutionNote = complainDetail.Notes,
+                    FinishedDate = complainDetail.FinishedDate,
+                    
                 };
                 details.Add(detail);
             }

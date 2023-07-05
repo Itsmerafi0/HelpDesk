@@ -28,7 +28,7 @@ namespace API.Controllers
             _emailService = emailService;
         }
 
-        [HttpPut("updatestatus")]
+        [HttpPut("UpdateStatus")]
         public IActionResult UpdateResolutionStatus(Guid resolutionGuid, StatusLevel newStatus)
         {
             var resolution = _resolutionRepository.GetByGuid(resolutionGuid);
@@ -74,7 +74,7 @@ namespace API.Controllers
                          .SendEmailAsync();
         }
 
-        [HttpPut("updateresolvedBy")]
+        [HttpPut("UpdateResolvedBy")]
         public IActionResult UpdateResolvedBy(Guid resolutionGuid, Guid resolvedBy)
         {
             var resolution = _resolutionRepository.GetByGuid(resolutionGuid);
@@ -106,7 +106,7 @@ namespace API.Controllers
             });
         }
 
-        [HttpPut("updateresolutionnotes")]
+        [HttpPut("UpdateResolutionNotes")]
         public IActionResult UpdateResolutionNotes(Guid resolutionGuid, string notes)
         {
             var resolution = _resolutionRepository.GetByGuid(resolutionGuid);

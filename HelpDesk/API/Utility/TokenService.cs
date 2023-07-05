@@ -32,7 +32,7 @@ namespace API.Utility
             var tokenOptions = new JwtSecurityToken(issuer: _configuration["JWT:Issuer"],
                                                     audience: _configuration["JWT:Audience"],
                                                     claims = claims,
-                                                    expires: DateTime.Now.AddMinutes(10),
+                                                    expires: DateTime.Now.AddMinutes(100),
                                                     signingCredentials: signinCredentials);
 
             var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);

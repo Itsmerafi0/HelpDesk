@@ -280,6 +280,9 @@ footer {
 .ag-format-container {
     width: 100%;
     margin: 0 auto;
+    align-content: center;
+    justify-content: center;
+    display: flex;
 }
 
 .ag-courses_box {
@@ -294,7 +297,6 @@ footer {
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
     padding: 100px 0;
-    background-color: #f2f2f2;
 }
 
 .ag-courses_item {
@@ -307,7 +309,7 @@ footer {
 
 .ag-courses-item_link {
     display: block;
-    padding: 70px 20px;
+    padding: 50px 20px;
     background-color: #121212;
     overflow: hidden;
     position: relative;
@@ -326,14 +328,15 @@ footer {
         }
 
 .ag-courses-item_title {
-    min-height: 87px;
-    margin: 0 0 25px;
+    margin: 20px;
     overflow: hidden;
     font-weight: bold;
-    font-size: 30px;
+    font-size: 20px;
     color: #FFF;
     z-index: 2;
     position: relative;
+    text-align: center;
+    justify-content: center;
 }
 
 .ag-courses-item_date-box {
@@ -423,4 +426,10 @@ footer {
     .ag-courses-item_date-box {
         font-size: 16px;
     }
+}
+
+.title-homeuser {
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 42px;
 }

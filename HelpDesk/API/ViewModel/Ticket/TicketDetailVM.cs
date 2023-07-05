@@ -15,7 +15,10 @@ namespace API.ViewModel.Ticket
 
         public Guid? ResolvedBy { get; set; }
         public string Description { get; set; }
+        
+        public byte[] Attachment { get; set; }
         public string ResolutionNote { get; set; }
+        
 
         public DateTime? FinishedDate { get; set; }
 

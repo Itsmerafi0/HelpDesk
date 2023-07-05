@@ -84,6 +84,7 @@ function loadTicketDetails() {
                 type: 'GET',
                 dataType: 'json',
                 success: function (empResponse) {
+                    var tickets = response.data.reverse();
                     var employees = empResponse.data;
 
                     for (var i = 0; i < tickets.length; i++) {
@@ -92,19 +93,29 @@ function loadTicketDetails() {
                         row.data('ticket-guid', ticket.guid);
                         row.data('status', ticket.statusLevel);
 
+                        var guidCell = $('<td></td>').text(ticket.guid);
                         var ticketIdCell = $('<td></td>').text(ticket.ticketId);
                         var requesterCell = $('<td></td>').text(ticket.requester);
                         var emailCell = $('<td></td>').text(ticket.email);
                         var categoryCell = $('<td></td>').text(ticket.categoryName);
                         var subcategoryCell = $('<td></td>').text(ticket.subCategoryName);
-                        var attachmentCell = $('<td></td>').text(ticket.attachment);
                         var riskLevelCell = $('<td></td>').html(getRiskLevelLabel(ticket.riskLevel));
                         var statusCell = $('<td class="status-cell"></td>').text(getStatusLabel(ticket.statusLevel));
-                        var finishedDateCell = $('<td class="finished-date-cell"></td>').text(ticket.finishDate);
+                        var finishedDate = new Date(ticket.finishedDate);
+                        var formattedDate = finishedDate.toLocaleDateString('en-GB', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric' // Use 'numeric' for 4-digit year
+                        });
+
+                        var finishedDateCell = $('<td class="finished-date-cell"></td>').text(formattedDate);
                         var resolutionNoteCell = $('<td></td>');
+                        var descriptionCell = $('<td></td>');
                         var resolvedByCell = $('<td></td>');
                         var resolvedByDropdown = $('<select class="resolved-by-dropdown"></select>');
                         resolvedByDropdown.append($('<option></option>').attr('value', '').text('-- Select Resolved By --'));
+
+
 
                         //var descriptionCell = $('<td></td>').text(ticket.description)
                         employees.forEach(function (employee) {
@@ -118,27 +129,42 @@ function loadTicketDetails() {
                         row.append(resolvedByCell);
 
 
-                        var descriptionText = ticket.description;
-                        var shortText = descriptionText.length > 25 ? descriptionText.substring(0, 25) + '...' : descriptionText;
-                        var descriptionCell = $('<td></td>').addClass('description-cell');
+                        var attachmentCell = $('<td></td>');
 
-                        var descriptionContent = $('<span class="description-content"></span>').text(shortText);
-                        descriptionCell.append(descriptionContent);
+                        
 
-                        if (descriptionText.length > 25) {
-                            var showMoreLink = $('<a href="#" class="show-more-link">Show More</a>');
-                            var showLessLink = $('<a href="#" class="show-less-link">Show Less</a>');
+                        if (ticket.attachment != null) {
+                            var attachmentLink = $('<a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal-' + ticket.Guid + '"></a>');
+                            var attachmentImg = $('<img src="data:image/jpg;base64,' + ticket.attachment + '" width="100px" alt="Image" />');
+                            attachmentLink.append(attachmentImg);
+                            attachmentCell.append(attachmentLink);
 
-                            descriptionCell.append(showMoreLink, showLessLink);
+                            var modalDiv = $('<div class="modal fade" id="exampleModal-' + ticket.Guid + '" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"></div>');
+                            var modalDialogDiv = $('<div class="modal-dialog"></div>');
+                            var modalContentDiv = $('<div class="modal-content"></div>');
+                            var modalHeaderDiv = $('<div class="modal-header"></div>');
+                            var modalTitle = $('<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>');
+                            var modalCloseButton = $('<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>');
+                            var modalBodyDiv = $('<div class="modal-body justify-items-center align-items-center"></div>');
+                            var modalBodyImg = $('<img src="data:image/jpg;base64,' + ticket.attachment + '" width="100px" alt="Image" />');
+                            var modalFooterDiv = $('<div class="modal-footer"></div>');
+                            var closeButton = $('<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>');
+                            var saveChangesButton = $('<button type="button" class="btn btn-primary">Save changes</button>');
 
-                            showMoreLink.data('full-description', descriptionText);
-                            showLessLink.data('short-description', shortText);
+                            modalHeaderDiv.append(modalTitle);
+                            modalHeaderDiv.append(modalCloseButton);
+                            modalBodyDiv.append(modalBodyImg);
+                            modalFooterDiv.append(closeButton);
+                            modalFooterDiv.append(saveChangesButton);
+                            modalContentDiv.append(modalHeaderDiv);
+                            modalContentDiv.append(modalBodyDiv);
+                            modalContentDiv.append(modalFooterDiv);
+                            modalDialogDiv.append(modalContentDiv);
+                            modalDiv.append(modalDialogDiv);
 
-                            showMoreLink.on('click', descriptionHandler(showMoreLink, showLessLink));
-                            showLessLink.on('click', descriptionHandler(showMoreLink, showLessLink));
-
-                            showLessLink.hide();
+                            $('body').append(modalDiv);
                         }
+
 
                         var dropdown = $('<select class="status-dropdown"></select>');
                         dropdown.append($('<option value="0">Delivered</option>'));
@@ -150,6 +176,11 @@ function loadTicketDetails() {
                         dropdown.val(ticket.statusLevel);
                         statusCell.html(dropdown);
 
+                        var descriptionCell = $('<td></td>');
+                        var viewButton = $('<button class="btn btn-primary view-button">View</button>');
+                        viewButton.data('note', ticket.description);
+                        descriptionCell.append(viewButton);
+
                         // Add view to resolution note
                         var resolutionNoteCell = $('<td></td>');
                         var viewButton = $('<button class="btn btn-primary view-button">View</button>');
@@ -157,7 +188,7 @@ function loadTicketDetails() {
                         resolutionNoteCell.append(viewButton);
 
 
-                        row.append(ticketIdCell, requesterCell, emailCell, categoryCell, subcategoryCell, riskLevelCell, statusCell, resolvedByCell, descriptionCell, attachmentCell, resolutionNoteCell, finishedDateCell);
+                        row.append(ticketIdCell,  emailCell,  subcategoryCell, riskLevelCell, statusCell, resolvedByCell, descriptionCell, attachmentCell, resolutionNoteCell, finishedDateCell);
                         tbody.append(row);
                         tbody.append(row);
                     }
@@ -172,6 +203,16 @@ function loadTicketDetails() {
         }
     });
 }
+
+$(document).on('click', '.view-button', function () {
+    var note = $(this).data('note');
+    $('#descriptionModal .modal-body').text(note);
+    $('#descriptionModal').modal('show');
+
+    $('#closedescriptionModal').off('click').on('click', function () {
+        $('#descriptionModal').modal('hide');
+    });
+});
 
 $(document).on('click', '.view-button', function () {
     var note = $(this).data('note');
@@ -250,7 +291,16 @@ function updateComplaintStatus(resolutionGuid, newStatus) {
             resolutionGuid: resolutionGuid,
             newStatus: newStatus
         }),
-        dataType: 'json'
+        dataType: 'json',
+        success: function (updateResponse) {
+            // Handle the success response
+            console.log('Status updated successfully:', updateResponse);
+        },
+        error: function (updateError) {
+            // Handle the error response
+            console.error('Error updating Status:', updateError);
+        }
+
     });
 }
 

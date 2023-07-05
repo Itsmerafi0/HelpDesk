@@ -164,17 +164,7 @@
                                             </th>
                                             <th class="border-bottom-0">
                                                 <h6 class="fw-semibold mb-0">
-                                                    Requester
-                                                </h6>
-                                            </th>
-                                            <th class="border-bottom-0">
-                                                <h6 class="fw-semibold mb-0">
                                                     Email
-                                                </h6>
-                                            </th>
-                                            <th class="border-bottom-0">
-                                                <h6 class="fw-semibold mb-0">
-                                                    Category
                                                 </h6>
                                             </th>
                                             <th class="border-bottom-0">
@@ -201,6 +191,11 @@
                                                 <h6 class="fw-semibold mb-0">
                                                     Description
                                                 </h6>
+                                            </th> 
+                                            <th class="border-bottom-0">
+                                                <h6 class="fw-semibold mb-0">
+                                                    Attachment
+                                                </h6>
                                             </th>
                                             <th class="border-bottom-0">
                                                 <h6 class="fw-semibold mb-0">
@@ -209,38 +204,95 @@
                                             </th>
                                             <th class="border-bottom-0">
                                                 <h6 class="fw-semibold mb-0">
-                                                    Finish Date
+                                                    Finished Date
                                                 </h6>
+                                            </th>
+                                            <th>
+                                                <th class="border-bottom-0">
+                                                    <h6 class="fw-semibold mb-0">
+                                                        Action
+                                                    </h6>
                                             </th>
                                        </tr>
                                     </thead>
                             <tbody>
                             </tbody>
                                 </table>
-                                <div id="confirmationModal" class="modal" tabindex="-1">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title">Confirm Status Update</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p>Are you sure you want to update the status?</p>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button id="confirmStatusUpdate" type="button" class="btn btn-primary">Confirm</button>
-                                                <button id="cancelStatusUpdate" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            
-        </div>
+                <div id="confirmationModal" class="modal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Confirm Status Update</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Are you sure you want to update the status?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button id="confirmStatusUpdate" type="button" class="btn btn-primary">Confirm</button>
+                                <button id="cancelStatusUpdate" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div id="resolvedByModal" class="modal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Confirm Resolved By Update</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Are you sure you want to update the Resolved By?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button id="confirmUpdate" type="button" class="btn btn-primary">Confirm</button>
+                                <button id="cancelUpdate" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="modal fade" id="resolutionNoteModal" tabindex="-1" role="dialog" aria-labelledby="resolutionNoteModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="resolutionNoteModalLabel">Resolution Note</h5>
+                            </div>
+                            <div class="modal-body">
+                            </div>
+                            <div class="modal-footer">
+                                <button id="closeResolutionNoteModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="descriptionModal" tabindex="-1" role="dialog" aria-labelledby="descriptionModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="descriptionModalLabel">Description </h5>
+                            </div>
+                            <div class="modal-body">
+                            </div>
+                            <div class="modal-footer">
+                                <button id="closedescriptionModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
     </div>
 
     <script>
@@ -250,11 +302,11 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="~/js/sidebarmenu.js" asp-append-version="true"></script>
+@*    <script src="~/js/sidebarmenu.js" asp-append-version="true"></script>
     <script src="~/js/app.min.js" asp-append-version="true"></script>
     <script src="~/js/apexcharts.min.js" asp-append-version="true"></script>
-    <script src="~/js/simplebar.js" asp-append-version="true"></script>
-    <script src="~/js/dashboard.js" asp-append-version="true"></script>
+*@@*    <script src="~/js/simplebar.js" asp-append-version="true"></script>
+  *@  <script src="~/js/dashboard.js" asp-append-version="true"></script>
     <script src="~/js/BadgeRisk.js" asp-append-version="true"></script>
         <script src="~/js/ChartGetAllTicketDetails.js" asp-append-version="true"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

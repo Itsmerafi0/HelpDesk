@@ -11,6 +11,7 @@ namespace API.Repository
         {
 
         }
+
         public void UpdateStatus(Resolution resolution, StatusLevel newStatus)
         {
             resolution.Status = newStatus;

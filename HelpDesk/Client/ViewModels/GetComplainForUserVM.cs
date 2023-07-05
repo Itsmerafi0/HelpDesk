@@ -11,6 +11,7 @@ namespace Client.ViewModels
         public byte[] Attachment { get; set; }
         public string CategoryName { get; set; }
         public string SubCategoryName { get; set; }
-        public StatusLevel StatusLevel { get; set; }        
+        public StatusLevel StatusLevel { get; set; }  
+        
     }
 }

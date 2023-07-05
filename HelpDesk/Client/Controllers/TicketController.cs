@@ -128,6 +128,7 @@ namespace Client.Controllers
 
             return View();
         }
+
         [Authorize(Roles = "Developer")]
         public async Task<IActionResult> GetAllTicketDev()
         {
@@ -151,7 +152,7 @@ namespace Client.Controllers
                   StatusLevel = c.StatusLevel,
                   Description = c.Description,
                   ResolutionNote = c.ResolutionNote,
-                  FinishDate = c.FinishDate
+                  finishedDate = c.finishedDate
                 }).ToList();
             }
 
