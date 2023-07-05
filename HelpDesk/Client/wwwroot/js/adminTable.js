@@ -5,7 +5,7 @@ $(document).ready(function () {
         var row = $(this).closest('tr');
         var ticketGuid = row.data('ticket-guid');
         var currentStatus = row.data('status'); // Store the current status
-        var newStatus = $(this).val();
+        var newStatus = 1;
         row.data('status', getStatusLabel(newStatus));
 
         $('#confirmationModal').modal('show');
@@ -16,13 +16,14 @@ $(document).ready(function () {
 
             updateComplaintStatus(ticketGuid, newStatus)
                 .then(function (response) {
-                    row.find('.status-cell').html(getStatusDropdown(newStatus));
-                    row.data('status', newStatus);
+                    console.log('Status Updated Successfully');
+                    /* row.find('.status-cell').html(getStatusDropdown(newStatus));
+                     row.data('status', newStatus);*/
                 })
                 .catch(function (error) {
                     console.error('Error:', error);
-                    row.find('.status-cell').html(getStatusDropdown(currentStatus));
-                    row.data('status', currentStatus);
+                    /* row.find('.status-cell').html(getStatusDropdown(currentStatus));
+                     row.data('status', currentStatus);*/
                 });
         });
 
@@ -131,7 +132,7 @@ function loadTicketDetails() {
 
                         var attachmentCell = $('<td></td>');
 
-                        
+
 
                         if (ticket.attachment != null) {
                             var attachmentLink = $('<a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal-' + ticket.Guid + '"></a>');
@@ -165,17 +166,17 @@ function loadTicketDetails() {
                             $('body').append(modalDiv);
                         }
 
-
-                        var dropdown = $('<select class="status-dropdown"></select>');
-                        dropdown.append($('<option value="0">Delivered</option>'));
-                        dropdown.append($('<option value="1">Accepted</option>'));
-                        dropdown.append($('<option value="2">Rejected</option>'));
-                        dropdown.append($('<option value="3">InProgress</option>'));
-                        dropdown.append($('<option value="4">Done</option>'));
-
-                        dropdown.val(ticket.statusLevel);
-                        statusCell.html(dropdown);
-
+                        /*
+                                                var dropdown = $('<select class="status-dropdown"></select>');
+                                                dropdown.append($('<option value="0">Delivered</option>'));
+                                                dropdown.append($('<option value="1">Accepted</option>'));
+                                                dropdown.append($('<option value="2">Rejected</option>'));
+                                                dropdown.append($('<option value="3">InProgress</option>'));
+                                                dropdown.append($('<option value="4">Done</option>'));
+                        
+                                                dropdown.val(ticket.statusLevel);
+                                                statusCell.html(dropdown);
+                        */
                         var descriptionCell = $('<td></td>');
                         var viewButton = $('<button class="btn btn-primary view-button">View</button>');
                         viewButton.data('note', ticket.description);
@@ -187,8 +188,12 @@ function loadTicketDetails() {
                         viewButton.data('note', ticket.resolutionNote);
                         resolutionNoteCell.append(viewButton);
 
+                        // Add Button Rejected
+                        var actionCell = $('<td></td>');
+                        var rejectedButton = $('<button class="rejected-button">Rejected</button>');
 
-                        row.append(ticketIdCell,  emailCell,  subcategoryCell, riskLevelCell, statusCell, resolvedByCell, descriptionCell, attachmentCell, resolutionNoteCell, finishedDateCell);
+
+                        row.append(ticketIdCell, emailCell, subcategoryCell, riskLevelCell, statusCell, resolvedByCell, descriptionCell, attachmentCell, resolutionNoteCell, finishedDateCell, actionCell);
                         tbody.append(row);
                         tbody.append(row);
                     }
@@ -247,7 +252,7 @@ function descriptionHandler(showMoreLink, showLessLink) {
 }
 
 
-function getStatusDropdown(status) {
+/*function getStatusDropdown(status) {
     var dropdown = $('<select class="status-dropdown"></select>');
     dropdown.append($('<option value="0">Delivered</option>'));
     dropdown.append($('<option value="1">Accepted</option>'));
@@ -258,7 +263,7 @@ function getStatusDropdown(status) {
     dropdown.val(status);
 
     return dropdown;
-}
+}*/
 
 function getRiskLevelLabel(riskLevel) {
     var riskLevelMap = {
@@ -272,11 +277,10 @@ function getRiskLevelLabel(riskLevel) {
 
 function getStatusLabel(status) {
     var statusLevelMap = {
-        "0": "Delivered",
-        "1": "Accepted",
-        "2": "Rejected",
-        "3": "OnProgress",
-        "4": "Done"
+        "0": "Requested",
+        "1": "Rejected",
+        "2": "InProgress",
+        "3": "Done"
     };
 
     return statusLevelMap[status] || "";
