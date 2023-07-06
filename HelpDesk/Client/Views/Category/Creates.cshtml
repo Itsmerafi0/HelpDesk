@@ -5,40 +5,58 @@
     Layout = null;
 }
 
-<link rel="stylesheet" href="~/css/data.css" asp-append-version="true" />
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/data.css" asp-append-version="true" />
+</head>
+<body>
 
-<div class="container">
-    <div class="text">
-        Create Category
-    </div>
-    <form asp-action="Creates">
-        <div class="form-row">
-            <div class="input-data" hidden>
-                <input asp-for="Guid" value="0" type="text" required>
-                <div class="underline"></div>
-                <label for="">Guid</label>
-            </div>
-            <div class="input-data">
-                <input asp-for="CategoryName" type="text" required>
-                <div class="underline"></div>
-                <label for="">Name</label>
-            </div>
+<div class="container-fluid">
+    <div class="container">
+        <div class="text">
+            Create Category
         </div>
-        <div class="form-row">
-            <div class="input-data">
-                <div class="form-row submit-btn">
-                    <div class="input-data">
-                        <div class="inner"></div>
-                        <input type="submit" value="Create">
-                    </div>
-                  
+        <form asp-action="Creates">
+            <div class="form-row">
+                <div class="input-data" hidden>
+                    <input asp-for="Guid" value="0" type="text" required>
+                    <div class="underline"></div>
+                    <label for="">Guid</label>
+                </div>
+                <div class="input-data">
+                    <input asp-for="CategoryName" type="text" required>
+                    <div class="underline"></div>
+                    <label for="">Name</label>
                 </div>
             </div>
-        </div>
-    </form>
-
+            <div class="form-row">
+                <div class="input-data">
+                    <div class="form-row submit-btn">
+                        <div class="input-data">
+                            <div class="inner"></div>
+                            <input type="submit" value="Create">
+                        </div>
+                  
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="button-back">
+        <a href="/Category/Index">
+            <img width="50" height="50" src="https://img.icons8.com/ios-filled/50/circled-left-2.png" alt="circled-left-2" />
+        </a>
+    </div>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+</body>
+</html>

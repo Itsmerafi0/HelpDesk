@@ -142,32 +142,32 @@
             <div class="container-fluid">
                 <!--  Row 1 -->
                 <div class="row">
-                    <div class="col-lg-8 d-flex align-items-strech">
+                    <div class="col-lg-6 d-flex align-items-stretch">
                         <div class="card w-100">
                             <div class="card-body">
                                 <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
                                     <div class="mb-3 mb-sm-0">
-                                        <h5 class="card-title fw-semibold">Chart Ticket Complain </h5>
+                                        <h5 class="card-title fw-semibold">Chart Ticket Complain</h5>
                                     </div>
                                 </div>
-                                <canvas id="myChart"></canvas>
+                                <div class="chat-container" style="height: auto;">
+                                    <canvas id="myChart"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-6">
                         <div class="row">
-                            <div class="col-lg-12">
-                                <!-- Yearly Breakup -->
-                                <div class="card overflow-hidden">
-                                    <div class="card-body p-4">
-                                        <div class="row align-items-center">
-                                            <div class="d-flex justify-content-center">
-                                                <canvas id="chartPie"></canvas>
-                                            </div>
+                            <!-- Yearly Breakup -->
+                            <div class="card overflow-hidden">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="chart-container" style="position: relative; height: 100%; width: 100%;">
+                                            <canvas id="chartPie"></canvas>
                                         </div>
                                     </div>
                                 </div>
-                            </div>             
+                            </div>
                         </div>
                     </div>
                 </div>

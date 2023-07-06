@@ -1,38 +1,6 @@
 $(document).ready(function () {
     loadTicketDetails();
 
-    $('#ticketsTable').on('change', '.status-dropdown', function () {
-        var row = $(this).closest('tr');
-        var ticketGuid = row.data('ticket-guid');
-        var currentStatus = row.data('status'); // Store the current status
-        var newStatus = $(this).val();
-        row.data('status', getStatusLabel(newStatus));
-
-        $('#confirmationModal').modal('show');
-
-
-        $('#confirmStatusUpdate').click(function () {
-            $('#confirmationModal').modal('hide');
-
-            updateComplaintStatus(ticketGuid, newStatus)
-                .then(function (response) {
-                    row.find('.status-cell').html(getStatusDropdown(newStatus));
-                    row.data('status', newStatus);
-                })
-                .catch(function (error) {
-                    console.error('Error:', error);
-                    row.find('.status-cell').html(getStatusDropdown(currentStatus));
-                    row.data('status', currentStatus);
-                });
-        });
-
-        $('#cancelStatusUpdate').click(function () {
-            $('#confirmationModal').modal('hide');
-            row.find('.status-cell').html(getStatusDropdown(currentStatus));
-            row.data('status', currentStatus);
-        });
-    });
-
     $('#ticketsTable').on('change', '.resolved-by-dropdown', function (event) {
         var row = $(this).closest('tr');
         var currentValue = row.data('resolved-by');
@@ -84,6 +52,7 @@ function loadTicketDetails() {
                 type: 'GET',
                 dataType: 'json',
                 success: function (empResponse) {
+                    var tickets = response.data.reverse();
                     var employees = empResponse.data;
 
                     for (var i = 0; i < tickets.length; i++) {
@@ -91,6 +60,7 @@ function loadTicketDetails() {
                         var row = $('<tr></tr>');
                         row.data('ticket-guid', ticket.guid);
                         row.data('status', ticket.statusLevel);
+                        //row.data('description', ticket.description);
                         row.data('resolved-by', ticket.resolvedBy)
 
                         var guidCell = $('<td></td>').text(ticket.guid);
@@ -102,59 +72,17 @@ function loadTicketDetails() {
                         var riskLevelCell = $('<td></td>').html(getRiskLevelLabel(ticket.riskLevel));
                         var statusCell = $('<td class="status-cell"></td>').text(getStatusLabel(ticket.statusLevel));
                         var descriptionCell = $('<td class="description-cell"></td>');
-                        var resolvedByCell = $('<td class="resolved-by-cell"></td>');
+                        var resolvedByCell = $('<td class="resolved-by-cell"></td>').text(ticket.resolvedBy);
                         var resolutionNoteCell = $('<td></td>')
-                        var finishedDateCell = $('<td class="finished-date-cell"></td>').text(ticket.finishedDate);
+                        var finishedDate = new Date(ticket.finishedDate);
+                        var finishedDate = ticket.finishedDate ? new Date(ticket.finishedDate) : null;
+                        var formattedDate = finishedDate ? finishedDate.toLocaleDateString('en-GB', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric' // Use 'numeric' for 4-digit year
+                        }) : "";
 
-
-                        // Add dropdown for status
-                        var dropdown = $('<select class="status-dropdown"></select>');
-                        dropdown.append($('<option value="0">Delivered</option>'));
-                        dropdown.append($('<option value="1">Accepted</option>'));
-                        dropdown.append($('<option value="2">Rejected</option>'));
-                        dropdown.append($('<option value="3">InProgress</option>'));
-                        dropdown.append($('<option value="4">Done</option>'));
-
-                        dropdown.val(ticket.statusLevel);
-                        statusCell.html(dropdown);
-
-                        // Add dropdown for resolved by
-                        var resolvedByDropdown = $('<select class="resolved-by-dropdown"></select>');
-                        resolvedByDropdown.append($('<option></option>').attr('value', '').text('-- Select Resolved By --'));
-
-                        employees.forEach(function (employee) {
-                            if (employee.roleName === 'Developer' || employee.roleName === 'Finance') {
-                                resolvedByDropdown.append($('<option></option>').attr('value', employee.employeeGuid).text(employee.roleName + " - " + employee.fullName));
-                            }
-                        });
-
-                        resolvedByDropdown.val(ticket.resolvedBy);
-                        resolvedByCell.append(resolvedByDropdown);
-                        row.append(resolvedByCell);
-
-
-                        // Add show more show less for description
-                        var descriptionText = ticket.description;
-                        var shortText = descriptionText.length > 25 ? descriptionText.substring(0, 25) + '...' : descriptionText;
-
-
-                        var descriptionContent = $('<span class="description-content"></span>').text(shortText);
-                        descriptionCell.append(descriptionContent);
-
-                        if (descriptionText.length > 25) {
-                            var showMoreLink = $('<a href="#" class="show-more-link">Show More</a>');
-                            var showLessLink = $('<a href="#" class="show-less-link">Show Less</a>');
-
-                            descriptionCell.append(showMoreLink, showLessLink);
-
-                            showMoreLink.data('full-description', descriptionText);
-                            showLessLink.data('short-description', shortText);
-
-                            showMoreLink.on('click', descriptionHandler(showMoreLink, showLessLink));
-                            showLessLink.on('click', descriptionHandler(showMoreLink, showLessLink));
-
-                            showLessLink.hide();
-                        }
+                        var finishedDateCell = $('<td class="finished-date-cell"></td>').text(formattedDate);
 
                         if (ticket.attachment != null) {
                             var attachmentLink = $('<a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal-' + ticket.Guid + '"></a>');
@@ -188,6 +116,11 @@ function loadTicketDetails() {
                             $('body').append(modalDiv);
                         }
 
+                        var descriptionCell = $('<td></td>');
+                        var viewDescription = $('<button class="btn btn-primary view-description">Detail</button>');
+                        viewDescription.data('description', ticket.description);
+                        descriptionCell.append(viewDescription);
+
 
                         // Add view button to resolution note cell
 
@@ -196,7 +129,14 @@ function loadTicketDetails() {
                         viewButton.data('note', ticket.resolutionNote);
                         resolutionNoteCell.append(viewButton);
 
-                        row.append( ticketIdCell, requesterCell, emailCell, subcategoryCell, riskLevelCell, statusCell, attachmentCell, descriptionCell, resolvedByCell, resolutionNoteCell, finishedDateCell);
+                        // Add button done
+                        var actionCell = $('<td></td>');
+                        var doneButton = $('<button class="btn btn-success done-button">Done</button>');
+                        doneButton.data('ticket-guid', ticket.guid);
+                        actionCell.append(doneButton)
+
+
+                        row.append(ticketIdCell, requesterCell, emailCell, subcategoryCell, riskLevelCell, statusCell, attachmentCell, resolvedByCell, finishedDateCell, descriptionCell, resolutionNoteCell, actionCell);
                         tbody.append(row);
                         tbody.append(row);
                     }
@@ -212,6 +152,44 @@ function loadTicketDetails() {
     });
 }
 
+$(document).on('click', '.view-description', function () {
+    var desc = $(this).data('description');
+    $('#descriptionModal .modal-body').text(desc);
+    $('#descriptionModal').modal('show');
+
+    $('#closedescriptionModal').off('click').on('click', function () {
+        $('#descriptionModal').modal('hide');
+    });
+});
+
+$(document).on('click', '.done-button', function () {
+    var ticketGuid = $(this).data('ticket-guid');
+
+    $('#confirmationModal').modal('show');
+
+    $('#confirmationModal').data('ticket-guid', ticketGuid);
+
+    rejectButton.prop('disabled', true);
+    rejectButton.addClass('disabled');
+});
+
+$(document).on('click', '#confirmDoneButton', function () {
+    var ticketGuid = $('#confirmationModal').data('ticket-guid');
+
+    updateComplaintStatus(ticketGuid, 3)
+        .done(function () {
+            var row = $('tr').filter(function () {
+                return $(this).data('ticket-guid') === ticketGuid;
+            });
+
+            var statusCell = row.find('.status-cell');
+            statusCell.text('Done');
+            $('#confirmationModal').modal('hide');
+        })
+        .fail(function (error) {
+            console.error('Error updating status:', error);
+        });
+});
 
 $(document).on('click', '.view-button', function () {
     var note = $(this).data('note');
@@ -251,41 +229,6 @@ $(document).on('click', '.view-button', function () {
 
 
 
-function descriptionHandler(showMoreLink, showLessLink) {
-    return function (e) {
-        e.preventDefault();
-        var $this = $(this);
-        var $descriptionCell = $this.parent();
-        var $descriptionContent = $descriptionCell.find('.description-content');
-        var fullDescription = showMoreLink.data('full-description');
-        var shortDescription = showLessLink.data('short-description');
-
-        if ($descriptionContent.text() === shortDescription) {
-            $descriptionContent.text(fullDescription);
-            $this.hide();
-            showLessLink.show();
-        } else {
-            $descriptionContent.text(shortDescription);
-            $this.hide();
-            showMoreLink.show();
-        }
-    };
-}
-
-
-function getStatusDropdown(status) {
-    var dropdown = $('<select class="status-dropdown"></select>');
-    dropdown.append($('<option value="0">Delivered</option>'));
-    dropdown.append($('<option value="1">Accepted</option>'));
-    dropdown.append($('<option value="2">Rejected</option>'));
-    dropdown.append($('<option value="3">InProgress</option>'));
-    dropdown.append($('<option value="4">Done</option>'));
-
-    dropdown.val(status);
-
-    return dropdown;
-}
-
 function getRiskLevelLabel(riskLevel) {
     var riskLevelMap = {
         0: '<span class="badge bg-success">Low</span>',
@@ -298,11 +241,10 @@ function getRiskLevelLabel(riskLevel) {
 
 function getStatusLabel(status) {
     var statusLevelMap = {
-        "0": "Delivered",
-        "1": "Accepted",
-        "2": "Rejected",
-        "3": "OnProgress",
-        "4": "Done"
+        "0": "Requested",
+        "1": "Rejected",
+        "2": "InProgress",
+        "3": "Done"
     };
 
     return statusLevelMap[status] || "";

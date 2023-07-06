@@ -11,7 +11,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"]</title>
+    <title>@ViewData["Title"] - Client</title>
     @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />*@
     <link rel="stylesheet" href="~/css/styles.min.css" asp-append-version="true" />
 </head>
@@ -25,8 +25,8 @@
             <!-- Sidebar scroll-->
             <div>
                 <div class="brand-logo d-flex align-items-center justify-content-between">
-                    <a href="/Home/Finance" class="text-nowrap logo-img">
-                        <img src="/image/Logo2.png" width="180" alt="Logo" />
+                    <a href="/Home/Developer" class="text-nowrap logo-img">
+                        <img src="/image/Logo.png" width="180" alt="Logo" />
                     </a>
                     <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
                         <i class="ti ti-x fs-8"></i>
@@ -40,7 +40,7 @@
                             <span class="hide-menu">Home</span>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="/Home/Finance" aria-expanded="false">
+                            <a class="sidebar-link" href="/Home/Developer" aria-expanded="false">
                                 <span>
                                     <i class="ti ti-layout-dashboard"></i>
                                 </span>
@@ -52,7 +52,7 @@
                             <span class="hide-menu">MENU</span>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="/Ticket/GetAllTicketFinance" aria-expanded="false">
+                            <a class="sidebar-link" href="/Ticket/GetAllTicketDev" aria-expanded="false">
                                 <span>
                                     <i class="ti ti-cards"></i>
                                 </span>
@@ -77,9 +77,8 @@
             </div>
             <!-- End Sidebar scroll-->
         </aside>
+        <!--  Sidebar End -->
         <!--  Main wrapper -->
-
-
         <div class="body-wrapper">
             <!--  Header Start -->
             <header class="app-header">
@@ -160,12 +159,17 @@
                                                 </th>
                                                 <th class="border-bottom-0">
                                                     <h6 class="fw-semibold mb-0">
-                                                        Description
+                                                        ResolvedBy
                                                     </h6>
                                                 </th>
                                                 <th class="border-bottom-0">
                                                     <h6 class="fw-semibold mb-0">
-                                                        ResolvedBy
+                                                        Finish Date
+                                                    </h6>
+                                                </th>
+                                                <th class="border-bottom-0">
+                                                    <h6 class="fw-semibold mb-0">
+                                                        Description
                                                     </h6>
                                                 </th>
                                                 <th class="border-bottom-0">
@@ -175,7 +179,7 @@
                                                 </th>
                                                 <th class="border-bottom-0">
                                                     <h6 class="fw-semibold mb-0">
-                                                        Finish Date
+                                                        Action
                                                     </h6>
                                                 </th>
                                             </tr>
@@ -192,37 +196,34 @@
         </div>
     </div>
 
-    <div id="confirmationModal" class="modal" tabindex="-1">
+    <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Confirm Status Update</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Confirmation</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Are you sure you want to update the status?</p>
+                    <p>Are you sure you want to finish this ticket?</p>
                 </div>
                 <div class="modal-footer">
-                    <button id="confirmStatusUpdate" type="button" class="btn btn-primary">Confirm</button>
-                    <button id="cancelStatusUpdate" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmDoneButton">Confirm</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="resolvedByModal" class="modal" tabindex="-1">
-        <div class="modal-dialog">
+    <div class="modal fade" id="descriptionModal" tabindex="-1" role="dialog" aria-labelledby="descriptionModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Confirm Resolved By Update</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title" id="descriptionModalLabel">Description </h5>
                 </div>
                 <div class="modal-body">
-                    <p>Are you sure you want to update the Resolved By?</p>
                 </div>
                 <div class="modal-footer">
-                    <button id="confirmUpdate" type="button" class="btn btn-primary">Confirm</button>
-                    <button id="cancelUpdate" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button id="closedescriptionModal" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -245,6 +246,7 @@
             </div>
         </div>
     </div>
+
 
     <script>
         let jwToken = "@jwToken";

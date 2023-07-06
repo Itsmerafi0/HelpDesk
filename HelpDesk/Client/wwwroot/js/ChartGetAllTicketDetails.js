@@ -39,8 +39,6 @@ $.ajax({
                         data: [riskLevels.Low, riskLevels.Medium, riskLevels.High],
                         backgroundColor: ['rgb(0, 209, 205)', 'rgb(255, 205, 86)', 'rgb(255, 99, 132)'],
                         borderWidth: 1,
-                        barPercentage: 0.3, // Adjust the width of the bars (0.6 means 60% of available space)
-                        categoryPercentage: 0.8,
                     },
                 ]
             },
@@ -52,12 +50,10 @@ $.ajax({
                             display: true,
                             color: 'rgba(0, 0, 0, 0.1)'
                         },
-                        barSpacing: 8,
                     },
                     x: {
                         grid: {
                             display: false,
-                            offset: true
                         },
                     }
                 },

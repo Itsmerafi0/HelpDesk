@@ -1,39 +1,6 @@
 $(document).ready(function () {
     loadTicketDetails();
 
-    $('#ticketsTable').on('change', '.status-dropdown', function () {
-        var row = $(this).closest('tr');
-        var ticketGuid = row.data('ticket-guid');
-        var currentStatus = row.data('status'); // Store the current status
-        var newStatus = 1;
-        row.data('status', getStatusLabel(newStatus));
-
-        $('#confirmationModal').modal('show');
-
-
-        $('#confirmStatusUpdate').click(function () {
-            $('#confirmationModal').modal('hide');
-
-            updateComplaintStatus(ticketGuid, newStatus)
-                .then(function (response) {
-                    console.log('Status Updated Successfully');
-                    /* row.find('.status-cell').html(getStatusDropdown(newStatus));
-                     row.data('status', newStatus);*/
-                })
-                .catch(function (error) {
-                    console.error('Error:', error);
-                    /* row.find('.status-cell').html(getStatusDropdown(currentStatus));
-                     row.data('status', currentStatus);*/
-                });
-        });
-
-        $('#cancelStatusUpdate').click(function () {
-            $('#confirmationModal').modal('hide');
-            row.find('.status-cell').html(getStatusDropdown(currentStatus));
-            row.data('status', currentStatus);
-        });
-    });
-
     $('#ticketsTable').on('change', '.resolved-by-dropdown', function (event) {
         var row = $(this).closest('tr');
         var currentValue = row.data('resolved-by');
@@ -47,25 +14,31 @@ $(document).ready(function () {
             $('#resolvedByModal').modal('hide');
             updateResolvedBy(ticketGuid, newValue)
                 .then(function (response) {
-                    row.find('.resolved-by-dropdown').val(newValue); // handle success response
+                    row.find('.resolved-by-dropdown').val(newValue);
+                    /*row.find('#resolved-by-dropdown').hide(); // Hide the dropdown*/
                     row.data('resolved-by', newValue);
                     console.log('ResolvedBy updated successfully:', response);
+                    var statusCell = row.find('.status-cell');
+                    statusCell.text('InProgress');
                 })
                 .catch(function (error) {
                     console.error('Error updating ResolvedBy:', error);
-                    row.find('.resolved-by-dropdown').val(currentValue); // handle error response
-                    row.data('resolved-by', currentValue);
+                    var resolvedByDropdown = row.find('.resolved-by-dropdown');
+                    resolvedByDropdown.val(resolvedByDropdown.data('current-value'));
+                    row.data('resolved-by', resolvedByDropdown.data('current-value'));
                 });
         });
 
         $('#cancelUpdate').off('click').on('click', function () {
             $('#resolvedByModal').modal('hide');
-            row.find('.resolved-by-dropdown').val(currentValue); // cancel update
-            row.data('resolved-by', currentValue);
+            // Retrieve the resolved-by dropdown value from the data attribute and set it in the dropdown
+            var resolvedByDropdown = row.find('.resolved-by-dropdown');
+            resolvedByDropdown.val(resolvedByDropdown.data('current-value'));
+            row.data('resolved-by', resolvedByDropdown.data('current-value'));
         });
     });
-
 });
+
 
 
 function loadTicketDetails() {
@@ -94,53 +67,64 @@ function loadTicketDetails() {
                         row.data('ticket-guid', ticket.guid);
                         row.data('status', ticket.statusLevel);
 
-                        var guidCell = $('<td></td>').text(ticket.guid);
-                        var ticketIdCell = $('<td></td>').text(ticket.ticketId);
-                        var requesterCell = $('<td></td>').text(ticket.requester);
+
+                        var ticketIdCell = $('<td></td>').text(ticket.ticketId)
                         var emailCell = $('<td></td>').text(ticket.email);
-                        var categoryCell = $('<td></td>').text(ticket.categoryName);
                         var subcategoryCell = $('<td></td>').text(ticket.subCategoryName);
                         var riskLevelCell = $('<td></td>').html(getRiskLevelLabel(ticket.riskLevel));
                         var statusCell = $('<td class="status-cell"></td>').text(getStatusLabel(ticket.statusLevel));
                         var finishedDate = new Date(ticket.finishedDate);
-                        var formattedDate = finishedDate.toLocaleDateString('en-GB', {
+                        var finishedDate = ticket.finishedDate ? new Date(ticket.finishedDate) : null;
+                        var formattedDate = finishedDate ? finishedDate.toLocaleDateString('en-GB', {
                             day: '2-digit',
                             month: '2-digit',
                             year: 'numeric' // Use 'numeric' for 4-digit year
-                        });
+                        }) : "";
 
                         var finishedDateCell = $('<td class="finished-date-cell"></td>').text(formattedDate);
+
                         var resolutionNoteCell = $('<td></td>');
                         var descriptionCell = $('<td></td>');
                         var resolvedByCell = $('<td></td>');
+
+                        // Add resolved by dropdown value based on subcategory
+
                         var resolvedByDropdown = $('<select class="resolved-by-dropdown"></select>');
                         resolvedByDropdown.append($('<option></option>').attr('value', '').text('-- Select Resolved By --'));
 
+                        var subcategory = ticket.subCategoryName;
 
+                        var filteredEmployees = [];
+                        if (subcategory === 'Login Issue' || subcategory === 'Forgot Password Issue') {
+                            filteredEmployees = employees.filter(function (employee) {
+                                return employee.roleName === 'Developer';
+                            });
+                        } else if (subcategory === 'Parking Reimbursement Issue' || subcategory === 'Transportation Reimbursement Issue' || subcategory === 'Overtime Reimbursement Issue') {
+                            filteredEmployees = employees.filter(function (employee) {
+                                return employee.roleName === 'Finance';
+                            });
+                        }
 
-                        //var descriptionCell = $('<td></td>').text(ticket.description)
-                        employees.forEach(function (employee) {
-                            if (employee.roleName === 'Developer' || employee.roleName === 'Finance') {
-                                resolvedByDropdown.append($('<option></option>').attr('value', employee.employeeGuid).text(employee.roleName + " - " + employee.fullName));
-                            }
+                        filteredEmployees.forEach(function (employee) {
+                            resolvedByDropdown.append($('<option></option>').attr('value', employee.employeeGuid).text(employee.fullName));
                         });
 
+                        resolvedByDropdown.data('current-value', ticket.resolvedBy);
                         resolvedByDropdown.val(ticket.resolvedBy);
                         resolvedByCell.append(resolvedByDropdown);
                         row.append(resolvedByCell);
 
+                        // Add attachment
 
                         var attachmentCell = $('<td></td>');
 
-
-
                         if (ticket.attachment != null) {
-                            var attachmentLink = $('<a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal-' + ticket.Guid + '"></a>');
+                            var attachmentLink = $('<a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal-' + ticket.guid + '"></a>');
                             var attachmentImg = $('<img src="data:image/jpg;base64,' + ticket.attachment + '" width="100px" alt="Image" />');
                             attachmentLink.append(attachmentImg);
                             attachmentCell.append(attachmentLink);
 
-                            var modalDiv = $('<div class="modal fade" id="exampleModal-' + ticket.Guid + '" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"></div>');
+                            var modalDiv = $('<div class="modal fade" id="exampleModal-' + ticket.guid + '" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"></div>');
                             var modalDialogDiv = $('<div class="modal-dialog"></div>');
                             var modalContentDiv = $('<div class="modal-content"></div>');
                             var modalHeaderDiv = $('<div class="modal-header"></div>');
@@ -178,9 +162,9 @@ function loadTicketDetails() {
                                                 statusCell.html(dropdown);
                         */
                         var descriptionCell = $('<td></td>');
-                        var viewButton = $('<button class="btn btn-primary view-button">View</button>');
-                        viewButton.data('note', ticket.description);
-                        descriptionCell.append(viewButton);
+                        var viewDescription = $('<button class="btn btn-primary view-description">Detail</button>');
+                        viewDescription.data('note', ticket.description);
+                        descriptionCell.append(viewDescription);
 
                         // Add view to resolution note
                         var resolutionNoteCell = $('<td></td>');
@@ -188,9 +172,11 @@ function loadTicketDetails() {
                         viewButton.data('note', ticket.resolutionNote);
                         resolutionNoteCell.append(viewButton);
 
-                        // Add Button Rejected
+                        // Add rejected button
                         var actionCell = $('<td></td>');
-                        var rejectedButton = $('<button class="rejected-button">Rejected</button>');
+                        var rejectButton = $('<button class="btn btn-danger reject-button">Reject</button>');
+                        rejectButton.data('ticket-guid', ticket.guid);
+                        actionCell.append(rejectButton)
 
 
                         row.append(ticketIdCell, emailCell, subcategoryCell, riskLevelCell, statusCell, resolvedByCell, descriptionCell, attachmentCell, resolutionNoteCell, finishedDateCell, actionCell);
@@ -208,6 +194,38 @@ function loadTicketDetails() {
         }
     });
 }
+
+
+$(document).on('click', '.reject-button', function () {
+    var ticketGuid = $(this).data('ticket-guid');
+
+    $('#confirmationModal').modal('show');
+
+    $('#confirmationModal').data('ticket-guid', ticketGuid);
+
+    rejectButton.prop('disabled', true);
+    rejectButton.addClass('disabled');
+});
+
+
+$(document).on('click', '#confirmRejectButton', function () {
+    var ticketGuid = $('#confirmationModal').data('ticket-guid');
+
+    updateComplaintStatus(ticketGuid, 1)
+        .done(function () {
+            var row = $('tr').filter(function () {
+                return $(this).data('ticket-guid') === ticketGuid;
+            });
+
+            var statusCell = row.find('.status-cell');
+            statusCell.text('Rejected');
+            $('#confirmationModal').modal('hide');
+        })
+        .fail(function (error) {
+            console.error('Error updating status:', error);
+        });
+});
+
 
 $(document).on('click', '.view-button', function () {
     var note = $(this).data('note');

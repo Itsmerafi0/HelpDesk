@@ -85,15 +85,16 @@ namespace API.Repository
             var resolutions = _dbContext.Resolutions.ToList();
             var categories = _dbContext.Categories.ToList();
 
-/*            Guid employeeGuid = new Guid("69de0986-1bd4-4237-8af2-08db797341b9");
-*/
-/*            var employeeGuid = Guid.Parse(_contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier));
-*/
+            /*            Guid employeeGuid = new Guid("69de0986-1bd4-4237-8af2-08db797341b9");
+            */
+            /*            var employeeGuid = Guid.Parse(_contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            */
             var complainDetails = from c in complains
                                   join e in employees on c.EmployeeGuid equals e.Guid
                                   join r in resolutions on c.Guid equals r.Guid
                                   join s in subcategories on c.SubCategoryGuid equals s.Guid
                                   join t in categories on s.CategoryGuid equals t.Guid
+                                  join resolvedByEmployee in employees on r.ResolvedBy equals resolvedByEmployee.Guid
                                   where t.CategoryName == "Access" && (r.Status == StatusLevel.Done || r.Status == StatusLevel.InProgress)
                                   select new
                                   {
@@ -107,8 +108,11 @@ namespace API.Repository
                                       c.Attachment,
                                       c.Description,
                                       r.Notes,
+                                      ResolvedByName = resolvedByEmployee.FirstName + " " + resolvedByEmployee.LastName,
                                       r.FinishedDate
                                   };
+
+
 
             var details = new List<GetTicketForDevVM>();
             foreach (var complainDetail in complainDetails)
@@ -124,14 +128,15 @@ namespace API.Repository
                     RiskLevel = complainDetail.RiskLevel,
                     StatusLevel = complainDetail.Status,
                     Description = complainDetail.Description,
+                    ResolvedBy = complainDetail.ResolvedByName,
                     ResolutionNote = complainDetail.Notes,
                     FinishedDate = complainDetail.FinishedDate
                 };
                 details.Add(detail);
             }
             return details;
-        }  
-        
+        }
+
         public IEnumerable<GetComplainForUserVM> GetAllComplainUser()
         {
             var complains = GetAll();
@@ -200,7 +205,8 @@ namespace API.Repository
                                   join r in resolutions on c.Guid equals r.Guid
                                   join s in subcategories on c.SubCategoryGuid equals s.Guid
                                   join t in categories on s.CategoryGuid equals t.Guid
-                                  where t.CategoryName == "Reimbursement" && (r.Status == StatusLevel.Done || r.Status == StatusLevel.InProgress)
+                                  join resolvedByEmployee in employees on r.ResolvedBy equals resolvedByEmployee.Guid
+                                  where t.CategoryName == "Reimbursement" && r.Status == StatusLevel.InProgress
                                   select new
                                   {
                                       c.Guid,
@@ -213,6 +219,7 @@ namespace API.Repository
                                       c.Attachment,
                                       c.Description,
                                       r.Notes,
+                                      ResolvedByName = resolvedByEmployee.FirstName + " " + resolvedByEmployee.LastName,
                                       r.FinishedDate
                                   };
             var details = new List<GetTicketForFinanceVM>();
@@ -229,6 +236,7 @@ namespace API.Repository
                     RiskLevel = complainDetail.RiskLevel,
                     StatusLevel = complainDetail.Status,
                     Description = complainDetail.Description,
+                    ResolvedBy = complainDetail.ResolvedByName,
                     ResolutionNote = complainDetail.Notes,
                     FinishedDate = complainDetail.FinishedDate,
                     

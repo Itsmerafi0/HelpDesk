@@ -14,6 +14,7 @@ namespace Client.ViewModels
         public StatusLevel StatusLevel { get; set; }
         public string Description { get; set; }
         public string ResolutionNote { get; set; }
+        public string ResolvedBy { get; set; }
         public DateTime? FinishedDate { get; set; }
 
     }

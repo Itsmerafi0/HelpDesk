@@ -1,4 +1,5 @@
 ﻿using Client.Utitlity;
+using System.ComponentModel.DataAnnotations;
 
 namespace Client.Models
 {
@@ -8,8 +9,10 @@ namespace Client.Models
         public string Nik { get; set; }
         public string FirstName { get; set; }
         public string? LastName { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime BirthDate { get; set; }
         public GenderLevel Gender { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime HiringDate { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }

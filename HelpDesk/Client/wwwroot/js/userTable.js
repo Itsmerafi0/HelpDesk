@@ -98,14 +98,15 @@ function loadTicketDetails() {
                         var subcategoryCell = $('<td></td>').text(ticket.subCategoryName);
                         var riskLevelCell = $('<td></td>').html(getRiskLevelLabel(ticket.riskLevel));
                         var statusCell = $('<td></td>').text(getStatusLabel(ticket.statusLevel));
-                        var finishedDate = new Date(ticket.finishedDate);
-                        var formattedDate = finishedDate.toLocaleDateString('en-GB', {
+                        var finishedDate = ticket.finishedDate ? new Date(ticket.finishedDate) : null;
+                        var formattedDate = finishedDate ? finishedDate.toLocaleDateString('en-GB', {
                             day: '2-digit',
                             month: '2-digit',
                             year: 'numeric' // Use 'numeric' for 4-digit year
-                        });
+                        }) : "";
 
                         var finishedDateCell = $('<td class="finished-date-cell"></td>').text(formattedDate);
+
                         var resolutionNoteCell = $('<td></td>');
                         var descriptionCell = $('<td></td>');
 
@@ -113,31 +114,27 @@ function loadTicketDetails() {
 
                         var attachmentCell = $('<td></td>');
 
-
-
                         if (ticket.attachment != null) {
-                            var attachmentLink = $('<a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal-' + ticket.Guid + '"></a>');
+                            var attachmentLink = $('<a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal-' + ticket.guid + '"></a>');
                             var attachmentImg = $('<img src="data:image/jpg;base64,' + ticket.attachment + '" width="100px" alt="Image" />');
                             attachmentLink.append(attachmentImg);
                             attachmentCell.append(attachmentLink);
 
-                            var modalDiv = $('<div class="modal fade" id="exampleModal-' + ticket.Guid + '" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"></div>');
+                            var modalDiv = $('<div class="modal fade" id="exampleModal-' + ticket.guid + '" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"></div>');
                             var modalDialogDiv = $('<div class="modal-dialog"></div>');
                             var modalContentDiv = $('<div class="modal-content"></div>');
                             var modalHeaderDiv = $('<div class="modal-header"></div>');
-                            var modalTitle = $('<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>');
+                            var modalTitle = $('<h5 class="modal-title" id="exampleModalLabel">Image</h5>');
                             var modalCloseButton = $('<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>');
                             var modalBodyDiv = $('<div class="modal-body justify-items-center align-items-center"></div>');
-                            var modalBodyImg = $('<img src="data:image/jpg;base64,' + ticket.attachment + '" width="100px" alt="Image" />');
+                            var modalBodyImg = $('<img src="data:image/jpg;base64,' + ticket.attachment + '" width="400px" alt="Image" />');
                             var modalFooterDiv = $('<div class="modal-footer"></div>');
                             var closeButton = $('<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>');
-                            var saveChangesButton = $('<button type="button" class="btn btn-primary">Save changes</button>');
 
                             modalHeaderDiv.append(modalTitle);
                             modalHeaderDiv.append(modalCloseButton);
                             modalBodyDiv.append(modalBodyImg);
                             modalFooterDiv.append(closeButton);
-                            modalFooterDiv.append(saveChangesButton);
                             modalContentDiv.append(modalHeaderDiv);
                             modalContentDiv.append(modalBodyDiv);
                             modalContentDiv.append(modalFooterDiv);
@@ -161,7 +158,7 @@ function loadTicketDetails() {
                         resolutionNoteCell.append(viewButton);
 
 
-                        row.append(ticketIdCell, emailCell, subcategoryCell, riskLevelCell, statusCell, descriptionCell, attachmentCell, resolutionNoteCell, finishedDateCell);
+                        row.append(ticketIdCell, emailCell, subcategoryCell, riskLevelCell, statusCell, attachmentCell, descriptionCell,  resolutionNoteCell, finishedDateCell);
                         tbody.append(row);
                         tbody.append(row);
                     }
@@ -220,7 +217,7 @@ function descriptionHandler(showMoreLink, showLessLink) {
 }
 
 
-function getStatusDropdown(status) {
+/*function getStatusDropdown(status) {
     var dropdown = $('<select class="status-dropdown"></select>');
     dropdown.append($('<option value="0">Delivered</option>'));
     dropdown.append($('<option value="1">Accepted</option>'));
@@ -232,6 +229,7 @@ function getStatusDropdown(status) {
 
     return dropdown;
 }
+*/
 
 function getRiskLevelLabel(riskLevel) {
     var riskLevelMap = {
@@ -245,11 +243,10 @@ function getRiskLevelLabel(riskLevel) {
 
 function getStatusLabel(status) {
     var statusLevelMap = {
-        "0": "Delivered",
-        "1": "Accepted",
-        "2": "Rejected",
-        "3": "OnProgress",
-        "4": "Done"
+        "0": "Requested",
+        "1": "Rejected",
+        "2": "InProgress",
+        "3": "Done"
     };
 
     return statusLevelMap[status] || "";

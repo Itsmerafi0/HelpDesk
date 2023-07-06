@@ -90,6 +90,8 @@ namespace API.Controllers
                 });
             }
             _resolutionRepository.UpdateResolvedBy(resolution, resolvedBy);
+            _resolutionRepository.UpdateStatus(resolution, StatusLevel.InProgress);
+            SendEmailNotification(resolutionGuid, StatusLevel.InProgress);
 
             var result = new UpdateResolvedByVM
             {

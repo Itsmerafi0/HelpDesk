@@ -37,6 +37,27 @@ namespace Client.Controllers
             return View();
         }
 
+        [AllowAnonymous]
+        [HttpGet("/Unauthorized")]
+        public IActionResult Unauthorized()
+        {
+            return View("401");
+        }
+
+        [AllowAnonymous]
+        [HttpGet("/NotFound")]
+        public IActionResult NotFound()
+        {
+            return View("404");
+        }
+
+        [AllowAnonymous]
+        [HttpGet("/Forbidden")]
+        public IActionResult Forbidden()
+        {
+            return View("403");
+        }
+
         [Authorize(Roles = "Developer")]
         public IActionResult Developer()
         {
