@@ -1,0 +1,84 @@
+﻿@model Client.Models.Employee
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "_RegisterLayout";
+
+}
+
+<div class="row">
+    <div class="col-md-5 image-container" style="background-color: #5D87FF; display: flex; justify-content: center; align-items: center; height: 580px;">
+        <div style="position: absolute; top: 40px; left: 85px;">
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <img src="~/image/register_icon.svg" alt="RegisterIcon" style="max-width: 75%; max-height: 75%;">
+            <div>
+                <p>Edit Employee</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-5" style="display: flex; flex-direction: column; justify-content: center; margin-left: 100px">
+        <form class="row needs-validation" action="Edit" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group col-md-6 mb-3" hidden>
+                <input asp-for="Guid" class="form-control" />
+             
+            </div> 
+            <div class="form-group col-md-6 mb-3" hidden>
+                <input asp-for="Nik" class="form-control" />
+             
+            </div>
+            <div class="form-group col-md-6 mb-3" >
+                <input asp-for="FirstName" class="form-control" />
+
+            </div>
+            <div class="form-group col-md-6 mb-3" >
+                <input asp-for="LastName" class="form-control" />
+               
+            </div>
+            <div class="form-group col-md-6 mb-3">
+                <select asp-for="Gender" class="form-control form-control-sm" required>
+                    <option value="" disabled selected>Select Gender</option>
+                    <option value="Female">Female</option>
+                    <option value="Male">Male</option>
+                </select>
+                <div class="invalid-feedback">
+                    <span asp-validation-for="Gender" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group col-md-6 mb-3">
+                <input asp-for="BirthDate" class="form-control form-control-sm" placeholder="Birth date" type="text" onfocus="(this.type='datetime-local')" onblur="(this.type='text')" required />
+                <div class="invalid-feedback">
+                    <span asp-validation-for="BirthDate" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group mb-3">
+                <input asp-for="HiringDate" class="form-control form-control-sm" placeholder="Hiring date" type="text" onfocus="(this.type='datetime-local')" onblur="(this.type='text')" required />
+                <div class="invalid-feedback">
+                    <span asp-validation-for="HiringDate" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group col-md-6 mb-3" >
+                <input asp-for="PhoneNumber" class="form-control" />
+               
+            </div>
+            <div class="form-group col-md-6 mb-3" >
+                <input asp-for="Email" class="form-control" />
+                
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+        <div class="button-back">
+            <a href="/Employee/Index">
+                <img width="50" height="50" src="https://img.icons8.com/ios-filled/50/circled-left-2.png" alt="circled-left-2" />
+            </a>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,42 @@
+﻿@model Client.ViewModels.LoginVM
+
+@{
+    ViewData["Title"] = "Login";
+    Layout = "_LoginLayout";
+}
+
+<div class="container" id="container">
+    <div class="form-container sign-in-container">
+        <form asp-action="Logins">
+            <h1>Sign in</h1>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="alert alert-danger" asp-validation-summary="All" style="display:none;"></div>
+            <input asp-for="Email" type="email" placeholder="Enter Email Address" />
+            <span asp-validation-for="Email" class="text-danger fs-4"></span>
+            <input asp-for="Password" type="password" placeholder="Enter Password" />
+            <span asp-validation-for="Password" class="text-danger fs-4"></span>
+            <input type="submit" value="Login" class="btn btn-primary" />
+        </form>
+    </div>
+    <div class="overlay-container">
+        <div class="overlay">
+            <div class="overlay-panel overlay-right">
+                <h1>Welcome Back!</h1>
+                <p>To keep connected with us, please login with your personal info</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>
+        Created with <i class="fa fa-heart"></i> by Kelompok 4
+        - Final Project Metrodata Coding Camp Batch 78
+    </p>
+</footer>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
