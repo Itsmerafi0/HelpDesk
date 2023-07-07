@@ -1,0 +1,92 @@
+﻿@model Client.ViewModels.RegisterVM
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+@{
+    ViewData["Title"] = "Registers";
+    Layout = "_RegisterLayout";
+}
+
+<div class="row">
+    <div class="col-md-5 image-container" style="background-color: #5D87FF; display: flex; justify-content: center; align-items: center; height: 580px;">
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <img src="~/image/register_icon.svg" alt="RegisterIcon" style="max-width: 75%; max-height: 75%;">
+            <div>
+                <p>Register an account</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-5" style="display: flex; flex-direction: column; justify-content: center; margin-left: 100px">
+        <form class="row needs-validation" asp-action="Registers">
+            <div asp-validation-summary="ModelOnly" class="text-white"></div>
+            <div class="form-group col-md-6 mb-3">
+                <input asp-for="FirstName" class="form-control form-control-md" placeholder="First Name" required />
+                <div class="invalid-feedback">
+                    <span asp-validation-for="FirstName" class="text-white"></span>
+                </div>
+            </div>
+            <div class="form-group col-md-6 mb-3">
+                <input asp-for="LastName" class="form-control form-control-md" placeholder="Last Name" />
+                <div class="invalid-feedback">
+                    <span asp-validation-for="LastName" class="text-white"></span>
+                </div>
+            </div>
+            <div class="form-group col-md-6 mb-3">
+                <select asp-for="Gender" class="form-control form-control-md" required>
+                    <option value="" disabled selected>Select Gender</option>
+                    <option value="Female">Female</option>
+                    <option value="Male">Male</option>
+                </select>
+                <div class="invalid-feedback">
+                    <span asp-validation-for="Gender" class="text-white"></span>
+                </div>
+            </div>
+            <div class="form-group col-md-6 mb-3">
+                <input asp-for="BirthDate" class="form-control form-control-md" placeholder="Birth Date" type="text" onfocus="(this.type='datetime-local')" onblur="(this.type='text')" required />
+                <div class="invalid-feedback">
+                    <span asp-validation-for="BirthDate" class="text-white"></span>
+                </div>
+            </div>
+            <div class="form-group mb-3">
+                <input asp-for="HiringDate" class="form-control form-control-md" placeholder="Hiring Date" type="text" onfocus="(this.type='datetime-local')" onblur="(this.type='text')" required />
+                <div class="invalid-feedback">
+                    <span asp-validation-for="HiringDate" class="text-white"></span>
+                </div>
+            </div>
+            <div class="form-group mb-3">
+                <input asp-for="PhoneNumber" class="form-control form-control-md" placeholder="Phone Number" required />
+                <div class="invalid-feedback">
+                    <span asp-validation-for="PhoneNumber" class="text-white"></span>
+                </div>
+            </div>
+            <div class="form-group mb-3">
+                <input asp-for="Email" class="form-control form-control-md" placeholder="Email" required />
+                <div class="invalid-feedback">
+                    <span asp-validation-for="Email" class="text-white"></span>
+                </div>
+            </div>
+            <div class="form-group col-md-6 mb-3">
+                <input asp-for="Password" class="form-control form-control-md" type="password" placeholder="Password" required />
+                <span asp-validation-for="Password" class="text-white password-validation"></span>
+            </div>
+            <div class="form-group col-md-6 mb-3">
+                <input asp-for="ConfirmPassword" class="form-control form-control-md" type="password" placeholder="Confirm Password" required />
+                <span asp-validation-for="ConfirmPassword" class="text-white password-validation"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Register" class="btn btn-primary" />
+            </div>
+            <div class="button-back">
+                <a href="/Employee/Index">
+                    <img width="50" height="50" src="https://img.icons8.com/ios-filled/50/circled-left-2.png" alt="circled-left-2" />
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

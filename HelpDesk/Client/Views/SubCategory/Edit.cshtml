@@ -1,0 +1,84 @@
+﻿@model Client.Models.SubCategory
+
+@{
+    ViewData["Title"] = "Edit";
+    var jwToken = ViewData["JWToken"];
+    Layout = null;
+
+
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/data.css" asp-append-version="true" />
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="container">
+        <div class="text">
+        Edit SubCategory
+        </div>
+        <form action="Edit" method="post">
+            <div class="form-row">
+                <div class="input-data" hidden>
+                    <input asp-for="Guid" type="text" required>
+                    <div class="underline"></div>
+                    <label for="">First Name</label>
+                </div>
+                <div class="input-data">
+                    <input asp-for="Name" type="text" required>
+                    <div class="underline"></div>
+                    <label for="">Name</label>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="input-data">
+                    <select asp-for="CategoryGuid" class="form-control-lg" id="myDropdown"></select>
+                    <span asp-validation-for="CategoryGuid" class="text-danger"></span>
+                </div>
+                <div class="input-data">
+                    <select asp-for="RiskLevel" class="form-control form-control-lg" required>
+                        <option value="" disabled selected>Select Risk</option>
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="input-data textarea">
+              
+                    <div class="form-row submit-btn">
+                        <div class="input-data">
+                            <div class="inner"></div>
+                            <input type="submit" value="Save">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="button-back">
+        <a href="/SubCategory/GetAllSub">
+            <img width="50" height="50" src="https://img.icons8.com/ios-filled/50/circled-left-2.png" alt="circled-left-2" />
+        </a>
+    </div>
+
+</div>
+
+
+<script>
+    var jwToken = "@jwToken";
+</script>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/SubCategory.js" asp-append-version="true"></script>
+
+</body>
+</html>
