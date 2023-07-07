@@ -166,6 +166,7 @@ namespace API.Repository
                                       s.Name,
                                       s.RiskLevel,
                                       r.Status,
+                                      r.Notes,
                                       r.FinishedDate,
                                   };
 
@@ -183,6 +184,7 @@ namespace API.Repository
                     SubCategoryName = complainDetail.Name,
                     RiskLevel = complainDetail.RiskLevel,
                     StatusLevel = complainDetail.Status,
+                    ResolutionNote = complainDetail.Notes,
                     FinishedDate = complainDetail.FinishedDate,
                 };
                 details.Add(detail);

@@ -152,6 +152,7 @@ function loadTicketDetails() {
                         descriptionCell.append(viewDescription);
 
                         // Add view to resolution note
+                     
                         var resolutionNoteCell = $('<td></td>');
                         var viewButton = $('<button class="btn btn-primary view-button">View</button>');
                         viewButton.data('note', ticket.resolutionNote);
