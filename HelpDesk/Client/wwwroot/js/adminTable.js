@@ -128,19 +128,17 @@ function loadTicketDetails() {
                             var modalDialogDiv = $('<div class="modal-dialog"></div>');
                             var modalContentDiv = $('<div class="modal-content"></div>');
                             var modalHeaderDiv = $('<div class="modal-header"></div>');
-                            var modalTitle = $('<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>');
+                            var modalTitle = $('<h5 class="modal-title" id="exampleModalLabel">Image</h5>');
                             var modalCloseButton = $('<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>');
                             var modalBodyDiv = $('<div class="modal-body justify-items-center align-items-center"></div>');
-                            var modalBodyImg = $('<img src="data:image/jpg;base64,' + ticket.attachment + '" width="100px" alt="Image" />');
+                            var modalBodyImg = $('<img src="data:image/jpg;base64,' + ticket.attachment + '" width="400px" alt="Image" />');
                             var modalFooterDiv = $('<div class="modal-footer"></div>');
                             var closeButton = $('<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>');
-                            var saveChangesButton = $('<button type="button" class="btn btn-primary">Save changes</button>');
 
                             modalHeaderDiv.append(modalTitle);
                             modalHeaderDiv.append(modalCloseButton);
                             modalBodyDiv.append(modalBodyImg);
                             modalFooterDiv.append(closeButton);
-                            modalFooterDiv.append(saveChangesButton);
                             modalContentDiv.append(modalHeaderDiv);
                             modalContentDiv.append(modalBodyDiv);
                             modalContentDiv.append(modalFooterDiv);
@@ -227,7 +225,7 @@ $(document).on('click', '#confirmRejectButton', function () {
 });
 
 
-$(document).on('click', '.view-button', function () {
+$(document).on('click', '.view-description', function () {
     var note = $(this).data('note');
     $('#descriptionModal .modal-body').text(note);
     $('#descriptionModal').modal('show');

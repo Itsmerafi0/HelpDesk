@@ -84,29 +84,29 @@ function loadTicketDetails() {
 
                         var finishedDateCell = $('<td class="finished-date-cell"></td>').text(formattedDate);
 
+                        var attachmentCell = $('<td></td>');
+
                         if (ticket.attachment != null) {
-                            var attachmentLink = $('<a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal-' + ticket.Guid + '"></a>');
+                            var attachmentLink = $('<a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal-' + ticket.guid + '"></a>');
                             var attachmentImg = $('<img src="data:image/jpg;base64,' + ticket.attachment + '" width="100px" alt="Image" />');
                             attachmentLink.append(attachmentImg);
                             attachmentCell.append(attachmentLink);
 
-                            var modalDiv = $('<div class="modal fade" id="exampleModal-' + ticket.Guid + '" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"></div>');
+                            var modalDiv = $('<div class="modal fade" id="exampleModal-' + ticket.guid + '" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"></div>');
                             var modalDialogDiv = $('<div class="modal-dialog"></div>');
                             var modalContentDiv = $('<div class="modal-content"></div>');
                             var modalHeaderDiv = $('<div class="modal-header"></div>');
-                            var modalTitle = $('<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>');
+                            var modalTitle = $('<h5 class="modal-title" id="exampleModalLabel">Image</h5>');
                             var modalCloseButton = $('<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>');
                             var modalBodyDiv = $('<div class="modal-body justify-items-center align-items-center"></div>');
-                            var modalBodyImg = $('<img src="data:image/jpg;base64,' + ticket.attachment + '" width="100px" alt="Image" />');
+                            var modalBodyImg = $('<img src="data:image/jpg;base64,' + ticket.attachment + '" width="400px" alt="Image" />');
                             var modalFooterDiv = $('<div class="modal-footer"></div>');
                             var closeButton = $('<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>');
-                            var saveChangesButton = $('<button type="button" class="btn btn-primary">Save changes</button>');
 
                             modalHeaderDiv.append(modalTitle);
                             modalHeaderDiv.append(modalCloseButton);
                             modalBodyDiv.append(modalBodyImg);
                             modalFooterDiv.append(closeButton);
-                            modalFooterDiv.append(saveChangesButton);
                             modalContentDiv.append(modalHeaderDiv);
                             modalContentDiv.append(modalBodyDiv);
                             modalContentDiv.append(modalFooterDiv);

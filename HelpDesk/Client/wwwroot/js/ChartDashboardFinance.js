@@ -63,7 +63,34 @@ $.ajax({
                         text: 'Chart Data Risk Level'
                     },
                     legend: {
-                        position: 'top'
+                        display: true, // Display legend
+                        position: 'top',
+                        labels: {
+                            generateLabels: function (chart) {
+                                // Generate custom legend labels based on the data
+                                const data = chart.data;
+                                if (data.labels.length && data.datasets.length) {
+                                    return data.labels.map((label, index) => {
+                                        const dataset = data.datasets[0];
+                                        const backgroundColor = dataset.backgroundColor[index];
+                                        return {
+                                            text: label + ': ' + dataset.data[index],
+                                            fillStyle: backgroundColor,
+                                            hidden: false,
+                                            lineCap: 'butt',
+                                            lineDash: [],
+                                            lineDashOffset: 0,
+                                            lineJoin: 'miter',
+                                            lineWidth: 1,
+                                            strokeStyle: backgroundColor,
+                                            pointStyle: 'circle',
+                                            rotation: 0
+                                        };
+                                    });
+                                }
+                                return [];
+                            }
+                        }
                     }
                 }
             }
@@ -134,7 +161,33 @@ $.ajax({
                         text: 'Chart Data Risk Level'
                     },
                     legend: {
-                        position: 'top'
+                        display: true, // Display legend
+                        position: 'top',
+                        labels: {
+                            generateLabels: function (chart) {
+                                const data = chart.data;
+                                if (data.labels.length && data.datasets.length) {
+                                    return data.labels.map((label, index) => {
+                                        const dataset = data.datasets[0];
+                                        const backgroundColor = dataset.backgroundColor[index];
+                                        return {
+                                            text: label + ': ' + dataset.data[index] + ' (' + percentage[label] + '%)',
+                                            fillStyle: backgroundColor,
+                                            hidden: false,
+                                            lineCap: 'butt',
+                                            lineDash: [],
+                                            lineDashOffset: 0,
+                                            lineJoin: 'miter',
+                                            lineWidth: 1,
+                                            strokeStyle: backgroundColor,
+                                            pointStyle: 'circle',
+                                            rotation: 0
+                                        };
+                                    });
+                                }
+                                return [];
+                            }
+                        }
                     }
                 },
                 tooltips: {
